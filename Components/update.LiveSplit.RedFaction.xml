@@ -1,11 +1,11 @@
 <updates>
-<update version="1.0.5">
+<update version="1.0.0">
 <files>
 <file path="Components/LiveSplit.RedFaction.dll" status="changed"/>
 </files>
 <changelog>
 <change>
-Test.
+Initial push
 </change>
 </changelog>
 </update>
