@@ -1,0 +1,72 @@
+<updates>
+<update version="1.0.5">
+<files>
+<file path="Components/LiveSplit.FEAR.dll" status="changed"/>
+</files>
+<changelog>
+<change>
+Moved entirely to LiveSplits internal deep pointer libary.
+</change>
+</changelog>
+</update>
+<update version="1.0.4">
+<files>
+<file path="Components/LiveSplit.FEAR.dll" status="changed"/>
+</files>
+<changelog>
+<change>
+LiveSplit 1.6 compatibility
+</change>
+</changelog>
+</update>
+<update version="1.0.3">
+<files>
+<file path="Components/LiveSplit.FEAR.dll" status="changed"/>
+</files>
+<changelog>
+<change>
+Made loading on 1.0 based on map currently loaded.
+</change>
+</changelog>
+</update>
+<update version="1.0.2">
+<files>
+<file path="Components/LiveSplit.FEAR.dll" status="changed"/>
+</files>
+<changelog>
+<change>
+Fixed process lenght for Steam version.
+</change>
+</changelog>
+</update>
+<update version="1.0.1">
+<files>
+<file path="Components/LiveSplit.FEAR.dll" status="changed"/>
+</files>
+<changelog>
+<change>
+Replaced IsLoading static adress with 4 level deep pointer.
+</change>
+</changelog>
+</update>
+<update version="1.0.0">
+<files>
+<file path="Components/LiveSplit.FEAR.dll" status="changed"/>
+</files>
+<changelog>
+<change>
+Version 1.0 support (still messy).
+</change>
+</changelog>
+</update>
+<update version="0.9.0">
+<files>
+<file path="Components/LiveSplit.FEAR.dll" status="changed"/>
+</files>
+<changelog>
+<change>
+Initial release
+</change>
+</changelog>
+</update>
+</updates>
