@@ -46,7 +46,7 @@ namespace LiveSplit.RedFaction
                 }
 
                 MessageBox.Show(
-                    "LiveSplit.FEAR is already loaded in the " +
+                    "LiveSplit.RedFaction is already loaded in the " +
                         (_instance.IsLayoutComponent ? "Layout Editor" : "Splits Editor") + "!",
                     "Error",
                     MessageBoxButtons.OK,
@@ -75,7 +75,7 @@ namespace LiveSplit.RedFaction
 
         public string XMLURL
         {
-            get { return this.UpdateURL + "Components/update.LiveSplit.FEAR.xml"; }
+            get { return this.UpdateURL + "Components/update.LiveSplit.RedFaction.xml"; }
         }
     }
 
