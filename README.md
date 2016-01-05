@@ -8,6 +8,11 @@ Features
   * Keeps track of Game Time to get rid of loading times.
   * Auto start/stop the timer.
   * Splits when you finish each split in Any%. (configurable)
+  
+Requirements
+-------
+* LiveSplit 1.6+
+* Red Faction with Pure Faction 3.0d patch installed.
 
 Install
 -------
