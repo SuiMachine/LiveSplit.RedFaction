@@ -54,6 +54,13 @@ namespace LiveSplit.RedFaction
         private DeepPointer _binkMoviePlaying;
         ProcessModuleWow64Safe binkw32;
 
+        private string[] validExeNames =
+        {
+            "pf",
+            "rf",
+            "rf_120na"
+        };
+
         private static class LevelName
         {
             public const string Chapter1Start = "l1s1.rfl";
@@ -100,7 +107,8 @@ namespace LiveSplit.RedFaction
 
         private enum ExpectedDllSizes
         {
-            PureFaction30d = 29945856
+            PureFaction30d = 29945856,
+            RedFaction1_20 = 29917184
         }
 
         public bool[] splitStates { get; set; }
@@ -192,7 +200,7 @@ namespace LiveSplit.RedFaction
                         bool isMoviePlaying;
                         string streamGroupId = String.Empty;
                         _levelNamePtr.DerefString(game, 10, out streamGroupId);
-                        streamGroupId = streamGroupId.ToLower();
+                        streamGroupId = streamGroupId != null ? streamGroupId.ToLower() : "";  //cause it can read null if the game started off fresh and then you'd try to convert it to lowercase and would get exception
                         _isLoadingPtr.Deref(game, out isLoading);
                         _binkMoviePlaying.Deref(game, out isMoviePlaying);
 
@@ -381,7 +389,8 @@ namespace LiveSplit.RedFaction
 
         Process GetGameProcess()
         {
-            Process game = Process.GetProcesses().FirstOrDefault(p => p.ProcessName.ToLower() == "pf" && !p.HasExited && !_ignorePIDs.Contains(p.Id));
+            Process game = Process.GetProcesses().FirstOrDefault(p => (validExeNames.Any(x => x == p.ProcessName.ToLower()))
+                && !p.HasExited && !_ignorePIDs.Contains(p.Id));
             if (game == null)
             {
                 return null;
@@ -391,14 +400,16 @@ namespace LiveSplit.RedFaction
             if (binkw32 == null)
                 return null;
 
-            if (game.MainModuleWow64Safe().ModuleMemorySize == (int)ExpectedDllSizes.PureFaction30d)
+            var mainModuleSize = game.MainModuleWow64Safe().ModuleMemorySize;
+
+            if (mainModuleSize == (int)ExpectedDllSizes.PureFaction30d || mainModuleSize == (int)ExpectedDllSizes.RedFaction1_20)
             {
 
             }
             else
             {
                 _ignorePIDs.Add(game.Id);
-                _uiThread.Send(d => MessageBox.Show("Unexpected game version. Red Faction (Pure Faction 3.0d) is required", "LiveSplit.RedFaction",
+                _uiThread.Send(d => MessageBox.Show("Unexpected game version. Red Faction 1.20 (including DashFaction) or Pure Faction 3.0d is required", "LiveSplit.RedFaction",
                     MessageBoxButtons.OK, MessageBoxIcon.Error), null);
                 return null;
             }

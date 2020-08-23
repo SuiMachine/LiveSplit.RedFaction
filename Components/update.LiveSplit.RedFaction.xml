@@ -1,12 +1,16 @@
 <updates>
-<update version="1.0.0">
-<files>
-<file path="Components/LiveSplit.RedFaction.dll" status="changed"/>
-</files>
-<changelog>
-<change>
-Initial push
-</change>
-</changelog>
-</update>
+	<update version="1.1.0">
+	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
+		<changelog>
+			<change>Basic support for Red Faction 1.20 (and DashFaction) executable.</change>
+			<change>Proper handling of null string this time.</change>
+			<change>Retargeted to .NET used currently by LiveSplit (.NET 4.6.1)</change>
+		</changelog>
+	</update>
+	<update version="1.0.0">
+	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
+		<changelog>
+			<change>Initial push</change>
+		</changelog>
+	</update>
 </updates>

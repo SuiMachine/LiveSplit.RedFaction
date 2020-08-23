@@ -1,4 +1,4 @@
-﻿LiveSplit.RedFaction v1.0.0
+﻿LiveSplit.RedFaction
 =====================
 
 LiveSplit.RedFaction is a [LiveSplit](http://livesplit.org/) component for Red Faction (Pure Faction).
@@ -12,7 +12,7 @@ Features
 Requirements
 -------
 * LiveSplit 1.6+
-* Red Faction with Pure Faction 3.0d patch installed.
+* Red Faction 1.20 (can be DashFaction) or Pure Faction 3.0d
 
 Install
 -------
@@ -34,7 +34,7 @@ If you wish to show Real Time on your layout, download AlternateTimingMethod fro
 
 Change Log
 ----------
-https://github.com/drtchops/LiveSplit.RedFaction/releases
+https://github.com/SuiMachine/LiveSplit.RedFaction/releases
 
 Credits
 -------

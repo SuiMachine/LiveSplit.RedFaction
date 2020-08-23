@@ -7,9 +7,9 @@ using LiveSplit.RedFaction;
 using LiveSplit.UI.Components;
 
 [assembly: AssemblyTitle("LiveSplit.RedFaction")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Autosplitter for Red Faction")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("SuicideMachine")]
 [assembly: AssemblyProduct("LiveSplit.RedFaction")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
@@ -33,7 +33,7 @@ using LiveSplit.UI.Components;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0")]
-[assembly: AssemblyFileVersion("1.0.0")]
+[assembly: AssemblyVersion("1.1.0")]
+[assembly: AssemblyFileVersion("1.1.0")]
 
 [assembly: ComponentFactory(typeof(RedFactionFactory))]
