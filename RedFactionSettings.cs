@@ -9,6 +9,7 @@ namespace LiveSplit.RedFaction
     {
         public bool AutoReset { get; set; }
         public bool AutoStart { get; set; }
+        public bool DontPauseOnSaveLoads { get; set; }
         public bool sC01 { get; set; }
         public bool sC02 { get; set; }
         public bool sC03 { get; set; }
@@ -32,6 +33,7 @@ namespace LiveSplit.RedFaction
 
         private const bool DEFAULT_AUTORESET = false;
         private const bool DEFAULT_AUTOSTART = true;
+        private const bool DEFAULT_DONTPAUSEONSAVELOADS = false;
         private const bool DEFAULT_C01 = true;
         private const bool DEFAULT_C02 = true;
         private const bool DEFAULT_C03 = true;
@@ -59,6 +61,7 @@ namespace LiveSplit.RedFaction
 
             this.chkAutoReset.DataBindings.Add("Checked", this, "AutoReset", false, DataSourceUpdateMode.OnPropertyChanged);
             this.chkAutoStart.DataBindings.Add("Checked", this, "AutoStart", false, DataSourceUpdateMode.OnPropertyChanged);
+            this.chkDontPauseOnSaveLoads.DataBindings.Add("Checked", this, "DontPauseOnSaveLoads", false, DataSourceUpdateMode.OnPropertyChanged);
             this.chk01.DataBindings.Add("Checked", this, "sC01", false, DataSourceUpdateMode.OnPropertyChanged);
             this.chk02.DataBindings.Add("Checked", this, "sC02", false, DataSourceUpdateMode.OnPropertyChanged);
             this.chk03.DataBindings.Add("Checked", this, "sC03", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -83,6 +86,7 @@ namespace LiveSplit.RedFaction
             // defaults
             this.AutoReset = DEFAULT_AUTORESET;
             this.AutoStart = DEFAULT_AUTOSTART;
+            this.DontPauseOnSaveLoads = DEFAULT_DONTPAUSEONSAVELOADS;
             this.sC01 = DEFAULT_C01;
             this.sC02 = DEFAULT_C02;
             this.sC03 = DEFAULT_C03;
@@ -113,6 +117,7 @@ namespace LiveSplit.RedFaction
 
             settingsNode.AppendChild(ToElement(doc, "AutoReset", this.AutoReset));
             settingsNode.AppendChild(ToElement(doc, "AutoStart", this.AutoStart));
+            settingsNode.AppendChild(ToElement(doc, "DontPauseOnSaveLoad", this.DontPauseOnSaveLoads));
             settingsNode.AppendChild(ToElement(doc, "C1", this.sC01));
             settingsNode.AppendChild(ToElement(doc, "C2", this.sC02));
             settingsNode.AppendChild(ToElement(doc, "C3", this.sC03));
@@ -142,6 +147,7 @@ namespace LiveSplit.RedFaction
         {
             this.AutoReset = ParseBool(settings, "AutoReset", DEFAULT_AUTORESET);
             this.AutoStart = ParseBool(settings, "AutoStart", DEFAULT_AUTOSTART);
+            this.DontPauseOnSaveLoads = ParseBool(settings, "DontPauseOnSaveLoad", DEFAULT_DONTPAUSEONSAVELOADS);
             this.sC01 = ParseBool(settings, "C1", DEFAULT_C01);
             this.sC02 = ParseBool(settings, "C2", DEFAULT_C02);
             this.sC03 = ParseBool(settings, "C3", DEFAULT_C03);
