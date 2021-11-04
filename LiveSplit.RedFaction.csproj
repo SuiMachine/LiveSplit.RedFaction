@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MathStuff.cs" />
     <Compile Include="RedFactionComponent.cs" />
     <Compile Include="RedFactionFactory.cs" />
     <Compile Include="RedFactionSettings.cs">

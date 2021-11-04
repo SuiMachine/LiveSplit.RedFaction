@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
 			this.gbEndSplits = new System.Windows.Forms.GroupBox();
+			this.CBList_Splits = new System.Windows.Forms.CheckedListBox();
 			this.gbStartSplits = new System.Windows.Forms.GroupBox();
 			this.tlpStartSplits = new System.Windows.Forms.TableLayoutPanel();
 			this.chkAutoReset = new System.Windows.Forms.CheckBox();
-			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.chkAutoStart = new System.Windows.Forms.CheckBox();
+			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.Cbox_Mod = new System.Windows.Forms.ComboBox();
-			this.CBList_Splits = new System.Windows.Forms.CheckedListBox();
 			this.gbEndSplits.SuspendLayout();
 			this.gbStartSplits.SuspendLayout();
 			this.tlpStartSplits.SuspendLayout();
@@ -54,10 +54,19 @@
 			this.gbEndSplits.Dock = System.Windows.Forms.DockStyle.Top;
 			this.gbEndSplits.Location = new System.Drawing.Point(3, 63);
 			this.gbEndSplits.Name = "gbEndSplits";
-			this.gbEndSplits.Size = new System.Drawing.Size(450, 481);
+			this.gbEndSplits.Size = new System.Drawing.Size(450, 433);
 			this.gbEndSplits.TabIndex = 7;
 			this.gbEndSplits.TabStop = false;
 			this.gbEndSplits.Text = "Auto-splits";
+			// 
+			// CBList_Splits
+			// 
+			this.CBList_Splits.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.CBList_Splits.FormattingEnabled = true;
+			this.CBList_Splits.Location = new System.Drawing.Point(3, 16);
+			this.CBList_Splits.Name = "CBList_Splits";
+			this.CBList_Splits.Size = new System.Drawing.Size(444, 414);
+			this.CBList_Splits.TabIndex = 0;
 			// 
 			// gbStartSplits
 			// 
@@ -85,7 +94,7 @@
 			this.tlpStartSplits.Name = "tlpStartSplits";
 			this.tlpStartSplits.RowCount = 1;
 			this.tlpStartSplits.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tlpStartSplits.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tlpStartSplits.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
 			this.tlpStartSplits.Size = new System.Drawing.Size(213, 29);
 			this.tlpStartSplits.TabIndex = 4;
 			// 
@@ -100,20 +109,6 @@
 			this.chkAutoReset.Text = "Reset";
 			this.chkAutoReset.UseVisualStyleBackColor = true;
 			// 
-			// tlpMain
-			// 
-			this.tlpMain.ColumnCount = 1;
-			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.Controls.Add(this.gbEndSplits, 0, 1);
-			this.tlpMain.Controls.Add(this.tableLayoutPanel1, 0, 0);
-			this.tlpMain.Location = new System.Drawing.Point(0, 0);
-			this.tlpMain.Name = "tlpMain";
-			this.tlpMain.RowCount = 2;
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.Size = new System.Drawing.Size(456, 558);
-			this.tlpMain.TabIndex = 0;
-			// 
 			// chkAutoStart
 			// 
 			this.chkAutoStart.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -127,6 +122,20 @@
 			this.chkAutoStart.Text = "Start";
 			this.chkAutoStart.UseVisualStyleBackColor = true;
 			// 
+			// tlpMain
+			// 
+			this.tlpMain.ColumnCount = 1;
+			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpMain.Controls.Add(this.gbEndSplits, 0, 1);
+			this.tlpMain.Controls.Add(this.tableLayoutPanel1, 0, 0);
+			this.tlpMain.Location = new System.Drawing.Point(0, 0);
+			this.tlpMain.Name = "tlpMain";
+			this.tlpMain.RowCount = 2;
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpMain.Size = new System.Drawing.Size(456, 499);
+			this.tlpMain.TabIndex = 0;
+			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
@@ -139,7 +148,7 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(450, 54);
 			this.tableLayoutPanel1.TabIndex = 8;
 			// 
@@ -180,15 +189,7 @@
 			this.Cbox_Mod.Name = "Cbox_Mod";
 			this.Cbox_Mod.Size = new System.Drawing.Size(207, 21);
 			this.Cbox_Mod.TabIndex = 0;
-			// 
-			// CBList_Splits
-			// 
-			this.CBList_Splits.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.CBList_Splits.FormattingEnabled = true;
-			this.CBList_Splits.Location = new System.Drawing.Point(3, 16);
-			this.CBList_Splits.Name = "CBList_Splits";
-			this.CBList_Splits.Size = new System.Drawing.Size(444, 462);
-			this.CBList_Splits.TabIndex = 0;
+			this.Cbox_Mod.SelectedIndexChanged += new System.EventHandler(this.Cbox_Mod_SelectedIndexChanged);
 			// 
 			// RedFactionSettings
 			// 
@@ -196,7 +197,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tlpMain);
 			this.Name = "RedFactionSettings";
-			this.Size = new System.Drawing.Size(456, 563);
+			this.Size = new System.Drawing.Size(456, 499);
 			this.gbEndSplits.ResumeLayout(false);
 			this.gbStartSplits.ResumeLayout(false);
 			this.gbStartSplits.PerformLayout();

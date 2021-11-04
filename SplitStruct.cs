@@ -7,7 +7,7 @@ namespace LiveSplit.RedFaction
 	public class Mod
 	{
 		[XmlAttribute] public string ModName;
-		[XmlArrayItem] public List<SplitStructOverall> Splits;
+		[XmlArrayItem] public SplitStructOverall[] Splits;
 
 		public Mod()
 		{
@@ -15,11 +15,13 @@ namespace LiveSplit.RedFaction
 			Splits = null;
 		}
 
-		public Mod(string ModName, List<SplitStructOverall> Splits)
+		public Mod(string ModName, SplitStructOverall[] Splits)
 		{
 			this.ModName = ModName;
 			this.Splits = Splits;
 		}
+
+		public override string ToString() => ModName;
 	}
 
 	[Serializable]
@@ -30,7 +32,8 @@ namespace LiveSplit.RedFaction
 
 		public SplitStructOverall()
 		{
-			throw new Exception("Don't use that!");
+			Split = false;
+			Name = "";
 		}
 	}
 

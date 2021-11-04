@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
@@ -11,14 +12,16 @@ namespace LiveSplit.RedFaction
 	{
 		public bool AutoReset { get; set; }
 		public bool AutoStart { get; set; }
+		public int ModIndex { get; set; }
 
 		private const bool DEFAULT_AUTORESET = false;
 		private const bool DEFAULT_AUTOSTART = true;
+		private const int DEFAULT_MODINDEX = 0;
 
 		[XmlArrayItem]
-		public List<Mod> Mods = new List<Mod>()
+		public static Mod[] Mods = new Mod[]
 		{
-			new Mod("Base Game", new List<SplitStructOverall>()
+			new Mod("Base Game", new SplitStructOverall[]
 			{
 				new SplitLevelChange("Chapter 1 (Mines)", "l1s3.rfl", "l2s1.rfl"),
 				new SplitLevelChange("Chapter 2 (Barracks)", "l2s3.rfl", "l3s1.rfl"),
@@ -41,7 +44,7 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Chapter 19 (Finale)", "l20s2.rfl", "l20s3.rfl"),
 				new SplitVideoPlays("A Bomb!", "l20s3.rfl")
 			}),
-			new Mod("Some mod Game", new List<SplitStructOverall>()
+			new Mod("Some mod Game", new SplitStructOverall[]
 			{
 				new SplitLevelChange("Tram Station", "l1s1.rfl", "rfrev_kva00b.rfl"),
 				new SplitLevelChange("Surface of the Red Planet", "rfrev_kva00b.rfl", "rfrev_kva00c.rfl"),
@@ -68,10 +71,18 @@ namespace LiveSplit.RedFaction
 
 			this.chkAutoReset.DataBindings.Add("Checked", this, "AutoReset", false, DataSourceUpdateMode.OnPropertyChanged);
 			this.chkAutoStart.DataBindings.Add("Checked", this, "AutoStart", false, DataSourceUpdateMode.OnPropertyChanged);
+			this.Cbox_Mod.Items.Clear();
+			foreach(var mod in Mods)
+			{
+				this.Cbox_Mod.Items.Add(mod);
+			}
+
+			this.Cbox_Mod.DataBindings.Add("SelectedIndex", this, "ModIndex", false, DataSourceUpdateMode.OnPropertyChanged);
 
 			// defaults
 			this.AutoReset = DEFAULT_AUTORESET;
 			this.AutoStart = DEFAULT_AUTOSTART;
+			this.ModIndex = DEFAULT_MODINDEX;
 		}
 
 		public XmlNode GetSettings(XmlDocument doc)
@@ -82,6 +93,7 @@ namespace LiveSplit.RedFaction
 
 			settingsNode.AppendChild(ToElement(doc, "AutoReset", this.AutoReset));
 			settingsNode.AppendChild(ToElement(doc, "AutoStart", this.AutoStart));
+			settingsNode.AppendChild(ToElement(doc, "ModIndex", this.ModIndex));
 
 			return settingsNode;
 		}
@@ -90,6 +102,7 @@ namespace LiveSplit.RedFaction
 		{
 			this.AutoReset = ParseBool(settings, "AutoReset", DEFAULT_AUTORESET);
 			this.AutoStart = ParseBool(settings, "AutoStart", DEFAULT_AUTOSTART);
+			this.ModIndex = ParseInt(settings, "ModIndex", DEFAULT_MODINDEX);
 		}
 
 		static bool ParseBool(XmlNode settings, string setting, bool default_ = false)
@@ -100,11 +113,29 @@ namespace LiveSplit.RedFaction
 				: default_;
 		}
 
+		static int ParseInt(XmlNode settings, string setting, int default_ = 0)
+		{
+			int val;
+			return settings[setting] != null ?
+				(int.TryParse(settings[setting].InnerText, out val) ? MathStuff.Clamp(val, 0, Mods.Length-1) : default_)
+				: default_;
+		}
+
 		static XmlElement ToElement<T>(XmlDocument document, string name, T value)
 		{
 			XmlElement str = document.CreateElement(name);
 			str.InnerText = value.ToString();
 			return str;
+		}
+
+		private void Cbox_Mod_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var mod = Mods[((ComboBox)sender).SelectedIndex];
+			CBList_Splits.Items.Clear();
+			for(int i=0; i<mod.Splits.Length; i++)
+			{
+				CBList_Splits.Items.Add(mod.Splits[i].Name, mod.Splits[i].Split);
+			}
 		}
 	}
 }
