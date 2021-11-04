@@ -100,27 +100,7 @@ namespace LiveSplit.RedFaction
         void gameMemory_OnSplitCompleted(object sender, GameMemory.SplitArea split, uint frame)
         {
             Debug.WriteLineIf(split != GameMemory.SplitArea.None, String.Format("[NoLoads] Trying to split {0}, State: {1} - {2}", split, _gameMemory.splitStates[(int)split], frame));
-            if (_state.CurrentPhase == TimerPhase.Running && !_gameMemory.splitStates[(int)split] &&
-                ((split == GameMemory.SplitArea.Chapter1 && this.Settings.sC01) ||
-                (split == GameMemory.SplitArea.Chapter2 && this.Settings.sC02) ||
-                (split == GameMemory.SplitArea.Chapter3 && this.Settings.sC03) ||
-                (split == GameMemory.SplitArea.Chapter4 && this.Settings.sC04) ||
-                (split == GameMemory.SplitArea.Chapter5 && this.Settings.sC05) ||
-                (split == GameMemory.SplitArea.Chapter6 && this.Settings.sC06) ||
-                (split == GameMemory.SplitArea.Chapter7 && this.Settings.sC07) ||
-                (split == GameMemory.SplitArea.Chapter8 && this.Settings.sC08) ||
-                (split == GameMemory.SplitArea.Chapter9 && this.Settings.sC09) ||
-                (split == GameMemory.SplitArea.Chapter10 && this.Settings.sC10) ||
-                (split == GameMemory.SplitArea.Chapter11 && this.Settings.sC11) ||
-                (split == GameMemory.SplitArea.Chapter12 && this.Settings.sC12) ||
-                (split == GameMemory.SplitArea.Chapter13 && this.Settings.sC13) ||
-                (split == GameMemory.SplitArea.Chapter14 && this.Settings.sC14) ||
-                (split == GameMemory.SplitArea.Chapter15 && this.Settings.sC15) ||
-                (split == GameMemory.SplitArea.Chapter16 && this.Settings.sC16) ||
-                (split == GameMemory.SplitArea.Chapter17 && this.Settings.sC17) ||
-                (split == GameMemory.SplitArea.Chapter18 && this.Settings.sC18) ||
-                (split == GameMemory.SplitArea.Chapter19 && this.Settings.sC19) ||
-                (split == GameMemory.SplitArea.Bomb && this.Settings.sCBomb)))
+            if (_state.CurrentPhase == TimerPhase.Running && !_gameMemory.splitStates[(int)split])
             {
                 Trace.WriteLine(String.Format("[NoLoads] {0} Split - {1}", split, frame));
                 _timer.Split();
