@@ -140,9 +140,9 @@ namespace LiveSplit.RedFaction
                         {
                             for(int i=0; i<splitStates.Length; i++)
 							{
-                                if(!splitStates[i])
+                                if(!splitStates[i] && currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying))
 								{
-                                    currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying, ref splitStates[i]);
+                                    Split(i, frameCounter);
 								}
 							}
                         }
@@ -237,6 +237,7 @@ namespace LiveSplit.RedFaction
         private void Split(int split, uint frame)
         {
             Debug.WriteLine(String.Format("[NoLoads] split {0} - {1}", split, frame));
+            splitStates[split] = true;
             _uiThread.Post(d =>
             {
                 if (this.OnSplitCompleted != null)

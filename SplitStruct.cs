@@ -52,9 +52,9 @@ namespace LiveSplit.RedFaction
 			return new SplitStructOverall() { Split = this.Split, Name = this.Name };
 		}
 
-		internal virtual void Check(in string levelName, in string prevLevelName, in bool isMoviePlaying, ref bool markedField)
+		internal virtual bool Check(in string levelName, in string prevLevelName, in bool isMoviePlaying)
 		{
-			return;
+			return false;
 		}
 	}
 
@@ -80,12 +80,12 @@ namespace LiveSplit.RedFaction
 			this.CurrentLevelName = CurrentLevelName;
 		}
 
-		internal override void Check(in string levelName, in string prevLevelName, in bool isMoviePlaying, ref bool markedField)
+		internal override bool Check(in string levelName, in string prevLevelName, in bool isMoviePlaying)
 		{
-			if(this.CurrentLevelName == levelName && this.PreviousLevelName == prevLevelName)
-			{
-				markedField = true;
-			}
+			if (this.CurrentLevelName == levelName && this.PreviousLevelName == prevLevelName)
+				return true;
+			else
+				return false;
 		}
 	}
 
@@ -108,12 +108,12 @@ namespace LiveSplit.RedFaction
 			this.CurrentLevelName = CurrentLevelName;
 		}
 
-		internal override void Check(in string levelName, in string prevLevelName, in bool isMoviePlaying, ref bool markedField)
+		internal override bool Check(in string levelName, in string prevLevelName, in bool isMoviePlaying)
 		{
-			if(isMoviePlaying && this.CurrentLevelName == levelName)
-			{
-				markedField = true;
-			}
+			if (isMoviePlaying && this.CurrentLevelName == levelName)
+				return true;
+			else
+				return false;
 		}
 	}
 }
