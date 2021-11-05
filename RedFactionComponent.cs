@@ -32,7 +32,7 @@ namespace LiveSplit.RedFaction
 			this.Settings = new RedFactionSettings();
 
 			_timer = new TimerModel { CurrentState = state };
-			_timer.CurrentState.OnPause += timer_OnStart;
+			_timer.CurrentState.OnStart += timer_OnStart;
 
 			_gameMemory = new GameMemory(this.Settings);
 			_gameMemory.OnFirstLevelLoading += gameMemory_OnFirstLevelLoading;
