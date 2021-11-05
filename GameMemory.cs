@@ -131,7 +131,7 @@ namespace LiveSplit.RedFaction
                         bool isLoading;
                         bool isMoviePlaying;
                         string levelName = "";
-                        _levelNamePtr.DerefString(game, 10, out levelName);
+                        _levelNamePtr.DerefString(game, 32, out levelName);
                         levelName = levelName != null ? levelName.ToLower() : "";  //cause it can read null if the game started off fresh and then you'd try to convert it to lowercase and would get exception
                         _isLoadingPtr.Deref(game, out isLoading);
                         _binkMoviePlaying.Deref(game, out isMoviePlaying);
