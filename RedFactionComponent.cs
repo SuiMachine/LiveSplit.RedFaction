@@ -106,17 +106,32 @@ namespace LiveSplit.RedFaction
 
         public override XmlNode GetSettings(XmlDocument document)
         {
+            UpdateGameMemoryReader();
             return this.Settings.GetSettings(document);
         }
 
-        public override Control GetSettingsControl(LayoutMode mode)
+		private void UpdateGameMemoryReader()
+		{
+            this._gameMemory.currentSplits = Settings.CurrentSplits;
+            this._gameMemory.splitStates = new bool[this._gameMemory.currentSplits.Count];
+            this._gameMemory.resetSplitStates();
+        }
+
+		public override Control GetSettingsControl(LayoutMode mode)
         {
             return this.Settings;
         }
 
         public override void SetSettings(XmlNode settings)
         {
+            var prev = Settings.CurrentSplits;
             this.Settings.SetSettings(settings);
+            this._gameMemory.currentSplits = Settings.CurrentSplits;
+            if(this._gameMemory.currentSplits != prev)
+			{
+                this._gameMemory.splitStates = new bool[this._gameMemory.currentSplits.Count];
+                this._gameMemory.resetSplitStates();
+			}
         }
 
         public override void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode) { }

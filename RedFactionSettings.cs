@@ -63,6 +63,8 @@ namespace LiveSplit.RedFaction
 
 		public Mod[] Mods;
 
+		public List<SplitStructOverall> CurrentSplits => Mods[ModIndex].Splits;
+
 		public RedFactionSettings()
 		{
 			InitializeComponent();
