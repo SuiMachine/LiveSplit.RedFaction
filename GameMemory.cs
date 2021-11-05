@@ -61,50 +61,6 @@ namespace LiveSplit.RedFaction
             "rf_120na"
         };
 
-        private static class LevelName
-        {
-            public const string Chapter1Start = "l1s1.rfl";
-            public const string Chapter1Exit = "l1s3.rfl";
-            public const string Chapter2Start = "l2s1.rfl";
-            public const string Chapter2Exit = "l2s3.rfl";
-            public const string Chapter3Start = "l3s1.rfl";
-            public const string Chapter3Exit = "l3s4.rfl";
-            public const string Chapter4Start = "l4s1a.rfl";
-            public const string Chapter4StartB = "l4s1b.rfl";
-            public const string Chapter4Exit = "l4s4.rfl";
-            public const string Chapter5Start = "l5s1.rfl";
-            public const string Chapter5Exit = "l5s4.rfl";
-            public const string Chapter6Start = "l6s1.rfl";         //Administration
-            public const string Chapter6Exit = "l6s3.rfl";
-            public const string Chapter7Start = "l7s1.rfl";         //Backstage
-            public const string Chapter7Exit = "l7s4.rfl";
-            public const string Chapter8Start = "l8s1.rfl";         //Medical Labs
-            public const string Chapter8End = "l8s4.rfl";
-            public const string Chapter9Start = "l9s1.rfl";         //Caves
-            public const string Chapter9End = "l9s4.rfl";
-            public const string Chapter10Start = "l10s1.rfl";         //Zoo
-            public const string Chapter10End = "l10s4.rfl";
-            public const string Chapter11Start = "l11s1.rfl";         //Capek Secret Facility
-            public const string Chapter11End = "l11s3.rfl";
-            public const string Chapter12Start = "l12s1.rfl";         //Canion
-            public const string Chapter13Start = "l13s1.rfl";         //Satelite Control
-            public const string Chapter13End = "l13s3.rfl";
-            public const string Chapter14Start = "l14s1.rfl";         //Missile Command Center
-            public const string Chapter14End = "l14s3.rfl";
-            public const string Chapter15Start = "l15s1.rfl";         //Catch a shuttle
-            public const string Chapter15End = "l15s4.rfl";
-            public const string Chapter16Start = "l17s1.rfl";         //Spacestation (chapter 16 missing in game's files)
-            public const string Chapter16End = "l17s4.rfl";
-            public const string Chapter17Start = "l18s1.rfl";         //Back on Mars
-            public const string Chapter17End = "l18s3.rfl";
-            public const string Chapter18Start = "l19s1.rfl";         //Prision
-            public const string Chapter18End = "l19s3.rfl";
-            public const string Chapter19Start = "l20s1.rfl";         //Merc Base
-            public const string Chapter19End = "l20s2.rfl";
-            public const string Bomb = "l20s3.rfl";           //A bomb
-
-        }
-
         private enum ExpectedDllSizes
         {
             PureFaction30d = 29945856,
@@ -206,86 +162,6 @@ namespace LiveSplit.RedFaction
 
                         if (streamGroupId != prevStreamGroupId && streamGroupId != null || isMoviePlaying != prevIsLoading)
                         {
-                            if (prevStreamGroupId == LevelName.Chapter1Exit && streamGroupId == LevelName.Chapter2Start)        //Mines
-                            {
-                                Split(SplitArea.Chapter1, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter2Exit && streamGroupId == LevelName.Chapter3Start)   //Barracks
-                            {
-                                Split(SplitArea.Chapter2, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter3Exit && streamGroupId == LevelName.Chapter4Start)   //Reception & Docks
-                            {
-                                Split(SplitArea.Chapter3, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter4Exit && streamGroupId == LevelName.Chapter5Start)   //Ventilation
-                            {
-                                Split(SplitArea.Chapter4, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter5Exit && streamGroupId == LevelName.Chapter6Start)  //Geothermal Plant
-                            {
-                                Split(SplitArea.Chapter5, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter6Exit && streamGroupId == LevelName.Chapter7Start)
-                            {
-                                Split(SplitArea.Chapter6, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter7Exit && streamGroupId == LevelName.Chapter8Start)
-                            {
-                                Split(SplitArea.Chapter7, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter8End && streamGroupId == LevelName.Chapter9Start)
-                            {
-                                Split(SplitArea.Chapter8, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter9End && streamGroupId == LevelName.Chapter10Start)
-                            {
-                                Split(SplitArea.Chapter9, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter10End && streamGroupId == LevelName.Chapter11Start)
-                            {
-                                Split(SplitArea.Chapter10, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter11End && streamGroupId == LevelName.Chapter12Start)
-                            {
-                                Split(SplitArea.Chapter11, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter12Start && streamGroupId == LevelName.Chapter13Start)
-                            {
-                                Split(SplitArea.Chapter12, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter13End && streamGroupId == LevelName.Chapter14Start)
-                            {
-                                Split(SplitArea.Chapter13, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter14End && streamGroupId == LevelName.Chapter15Start)
-                            {
-                                Split(SplitArea.Chapter14, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter15End && streamGroupId == LevelName.Chapter16Start)
-                            {
-                                Split(SplitArea.Chapter15, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter16End && streamGroupId == LevelName.Chapter17Start)
-                            {
-                                Split(SplitArea.Chapter16, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter17End && streamGroupId == LevelName.Chapter18Start)
-                            {
-                                Split(SplitArea.Chapter17, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter18End && streamGroupId == LevelName.Chapter19Start)
-                            {
-                                Split(SplitArea.Chapter18, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter19End && streamGroupId == LevelName.Bomb)
-                            {
-                                Split(SplitArea.Chapter19, frameCounter);
-                            }
-                            else if (streamGroupId == LevelName.Bomb && isMoviePlaying)
-                            {
-                                Split(SplitArea.Bomb, frameCounter);
-                            }
                         }
 
 
@@ -308,7 +184,7 @@ namespace LiveSplit.RedFaction
                                     }
                                 }, null);
 
-                                if (streamGroupId == LevelName.Chapter1Start && isMoviePlaying)
+/*                                if (streamGroupId == LevelName.Chapter1Start && isMoviePlaying)
                                 {
                                     //reset game timer
                                     _uiThread.Post(d =>
@@ -318,7 +194,7 @@ namespace LiveSplit.RedFaction
                                             this.OnFirstLevelLoading(this, EventArgs.Empty);
                                         }
                                     }, null);
-                                }
+                                }*/
                             }
                             else
                             {
@@ -336,7 +212,7 @@ namespace LiveSplit.RedFaction
                                         }
                                     }, null);
 
-                                    if (streamGroupId == LevelName.Chapter1Start)
+/*                                    if (streamGroupId == LevelName.Chapter1Start)
                                     {
                                         // start game timer
                                         _uiThread.Post(d =>
@@ -346,7 +222,7 @@ namespace LiveSplit.RedFaction
                                                 this.OnPlayerGainedControl(this, EventArgs.Empty);
                                             }
                                         }, null);
-                                    }
+                                    }*/
                                 }
                             }
                         }

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Serialization;
 
 namespace LiveSplit.RedFaction
 {
@@ -103,23 +102,52 @@ namespace LiveSplit.RedFaction
 			this.AutoReset = ParseBool(settings, "AutoReset", DEFAULT_AUTORESET);
 			this.AutoStart = ParseBool(settings, "AutoStart", DEFAULT_AUTOSTART);
 			this.ModIndex = ParseInt(settings, "ModIndex", DEFAULT_MODINDEX, 0, DEFAULT_MODS.Length -1);
-			Mods = ParseXML(settings, "ModsSplit", DEFAULT_MODS);
+			Mods = ParseXML(settings, "ModStates", DEFAULT_MODS);
 		}
 
 		private Mod[] ParseXML(XmlNode settings, string setting, Mod[] default_)
 		{
-			if (settings[setting] is null)
+			var modParse = new Mod[default_.Length];
+			for (int i = 0; i < modParse.Length; i++)
 			{
-				var modParse = new Mod[default_.Length];
-				for (int i = 0; i < modParse.Length; i++)
-				{
-					modParse[i] = (Mod)default_[i].Clone();
-				}
-				return modParse;
-
+				modParse[i] = (Mod)default_[i].Clone();
 			}
 
-			return default_;
+			if (settings[setting] is null)
+				return modParse;
+			else
+			{
+				var node = settings[setting];
+				foreach(XmlElement mod in node)
+				{
+					var modName = mod.Attributes["Name"];
+					if(modName != null)
+					{
+						var foundMod = modParse.FirstOrDefault(x => x.ModName == modName.InnerText);
+						if(foundMod != null)
+						{
+							if(mod["Splits"] != null)
+							{
+								var splitsNode = mod["Splits"];
+								foreach(XmlElement split in splitsNode)
+								{
+									if(split.Attributes["Name"] != null)
+									{
+										var splitName = split.Attributes["Name"];
+										var foundSplit = foundMod.Splits.FirstOrDefault(x => x.Name == splitName.InnerText);
+										if(foundSplit != null)
+										{
+											foundSplit.Split = bool.TryParse(split.InnerText, out var parsedVal) ? parsedVal : false;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				return modParse;
+			}
 		}
 
 		static bool ParseBool(XmlNode settings, string setting, bool default_ = false)
@@ -147,10 +175,57 @@ namespace LiveSplit.RedFaction
 			return default_;
 		}
 
+
+
 		static XmlElement ToElement<T>(XmlDocument document, string name, T value)
 		{
 			XmlElement str = document.CreateElement(name);
 			str.InnerText = value.ToString();
+			return str;
+		}
+
+		static XmlElement ToElement(XmlDocument document, string name, Mod[] value)
+		{
+			//God help me
+			XmlElement str = document.CreateElement(name);
+			for(int i=0; i<value.Length; i++)
+			{
+				var node = ToElement(document, value[i]);
+				str.AppendChild(node);
+			}
+
+			return str;
+		}
+
+		static XmlElement ToElement(XmlDocument document, Mod value)
+		{
+			XmlElement str = document.CreateElement("Mod");
+			var attr = document.CreateAttribute("Name");
+			attr.InnerText = value.ModName;
+			str.Attributes.Append(attr);
+			var node = ToElement(document, value.Splits);
+			str.AppendChild(node);
+			return str;
+		}
+
+		static XmlElement ToElement(XmlDocument document, List<SplitStructOverall> value)
+		{
+			XmlElement str = document.CreateElement("Splits");
+			for(int i=0; i<value.Count; i++)
+			{
+				var node = ToElement(document, value[i]);
+				str.AppendChild(node);
+			}
+			return str;
+		}
+
+		static XmlElement ToElement(XmlDocument document, SplitStructOverall value)
+		{
+			XmlElement str = document.CreateElement("Split");
+			var attr = document.CreateAttribute("Name");
+			attr.InnerText = value.Name;
+			str.Attributes.Append(attr);
+			str.InnerText = value.Split.ToString();
 			return str;
 		}
 
