@@ -11,36 +11,11 @@ namespace LiveSplit.RedFaction
 {
     class GameMemory
     {
-        public enum SplitArea : int
-        {
-            None,
-            Chapter1,
-            Chapter2,
-            Chapter3,
-            Chapter4,
-            Chapter5,
-            Chapter6,
-            Chapter7,
-            Chapter8,
-            Chapter9,
-            Chapter10,
-            Chapter11,
-            Chapter12,
-            Chapter13,
-            Chapter14,
-            Chapter15,
-            Chapter16,
-            Chapter17,
-            Chapter18,
-            Chapter19,
-            Bomb
-        }
-
         public event EventHandler OnPlayerGainedControl;
         public event EventHandler OnLoadStarted;
         public event EventHandler OnFirstLevelLoading;
         public event EventHandler OnLoadFinished;
-        public delegate void SplitCompletedEventHandler(object sender, SplitArea type, uint frame);
+        public delegate void SplitCompletedEventHandler(object sender, int split, uint frame);
         public event SplitCompletedEventHandler OnSplitCompleted;
 
         private Task _thread;
@@ -67,21 +42,22 @@ namespace LiveSplit.RedFaction
             RedFaction1_20 = 29917184
         }
 
+        public List<SplitStructOverall> currentSplits { get; set; }
         public bool[] splitStates { get; set; }
 
         public void resetSplitStates()
         {
-            for (int i = 0; i <= (int)SplitArea.Bomb; i++)
+            for (int i = 0; i < currentSplits.Count; i++)
             {
                 splitStates[i] = false;
             }
-
         }
 
         public GameMemory(RedFactionSettings componentSettings)
         {
             _settings = componentSettings;
-            splitStates = new bool[(int)SplitArea.Bomb + 1];
+            currentSplits = componentSettings.Mods[componentSettings.ModIndex].Splits;
+            splitStates = new bool[currentSplits.Count];
 
             _isLoadingPtr = new DeepPointer(0x13756AC); // == 1 if a loadscreen is happening
             _levelNamePtr = new DeepPointer(0x0246144, 0x0);
@@ -145,7 +121,7 @@ namespace LiveSplit.RedFaction
 
                     bool prevIsLoading = false;
                     bool prevIsMoviePlaying = false;
-                    string prevStreamGroupId = String.Empty;
+                    string prevLevelName = "";
 
 
                     bool loadingStarted = false;
@@ -154,14 +130,21 @@ namespace LiveSplit.RedFaction
                     {
                         bool isLoading;
                         bool isMoviePlaying;
-                        string streamGroupId = String.Empty;
-                        _levelNamePtr.DerefString(game, 10, out streamGroupId);
-                        streamGroupId = streamGroupId != null ? streamGroupId.ToLower() : "";  //cause it can read null if the game started off fresh and then you'd try to convert it to lowercase and would get exception
+                        string levelName = "";
+                        _levelNamePtr.DerefString(game, 10, out levelName);
+                        levelName = levelName != null ? levelName.ToLower() : "";  //cause it can read null if the game started off fresh and then you'd try to convert it to lowercase and would get exception
                         _isLoadingPtr.Deref(game, out isLoading);
                         _binkMoviePlaying.Deref(game, out isMoviePlaying);
 
-                        if (streamGroupId != prevStreamGroupId && streamGroupId != null || isMoviePlaying != prevIsLoading)
+                        if (levelName != prevLevelName && levelName != null || isMoviePlaying != prevIsLoading)
                         {
+                            for(int i=0; i<splitStates.Length; i++)
+							{
+                                if(!splitStates[i])
+								{
+                                    currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying, ref splitStates[i]);
+								}
+							}
                         }
 
 
@@ -184,7 +167,7 @@ namespace LiveSplit.RedFaction
                                     }
                                 }, null);
 
-/*                                if (streamGroupId == LevelName.Chapter1Start && isMoviePlaying)
+                                if (levelName == "l1s1.rfl" && isMoviePlaying)
                                 {
                                     //reset game timer
                                     _uiThread.Post(d =>
@@ -194,7 +177,7 @@ namespace LiveSplit.RedFaction
                                             this.OnFirstLevelLoading(this, EventArgs.Empty);
                                         }
                                     }, null);
-                                }*/
+                                }
                             }
                             else
                             {
@@ -212,7 +195,7 @@ namespace LiveSplit.RedFaction
                                         }
                                     }, null);
 
-/*                                    if (streamGroupId == LevelName.Chapter1Start)
+                                    if (levelName == "l1s1.rfl")
                                     {
                                         // start game timer
                                         _uiThread.Post(d =>
@@ -222,14 +205,14 @@ namespace LiveSplit.RedFaction
                                                 this.OnPlayerGainedControl(this, EventArgs.Empty);
                                             }
                                         }, null);
-                                    }*/
+                                    }
                                 }
                             }
                         }
 
 
-                        Debug.WriteLineIf(streamGroupId != prevStreamGroupId, String.Format("[NoLoads] streamGroupId changed from {0} to {1} - {2}", prevStreamGroupId, streamGroupId, frameCounter));
-                        prevStreamGroupId = streamGroupId;
+                        Debug.WriteLineIf(levelName != prevLevelName, String.Format("[NoLoads] streamGroupId changed from {0} to {1} - {2}", prevLevelName, levelName, frameCounter));
+                        prevLevelName = levelName;
                         prevIsLoading = isLoading;
                         prevIsMoviePlaying = isMoviePlaying;
                         
@@ -251,7 +234,7 @@ namespace LiveSplit.RedFaction
             }
         }
 
-        private void Split(SplitArea split, uint frame)
+        private void Split(int split, uint frame)
         {
             Debug.WriteLine(String.Format("[NoLoads] split {0} - {1}", split, frame));
             _uiThread.Post(d =>

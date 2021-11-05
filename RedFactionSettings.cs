@@ -41,7 +41,7 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Chapter 19 (Finale)", "l20s2.rfl", "l20s3.rfl"),
 				new SplitVideoPlays("A Bomb!", "l20s3.rfl")
 			}),
-			new Mod("Some mod", new List<SplitStructOverall>()
+			new Mod("Kava", new List<SplitStructOverall>()
 			{
 				new SplitLevelChange("Tram Station", "l1s1.rfl", "rfrev_kva00b.rfl"),
 				new SplitLevelChange("Surface of the Red Planet", "rfrev_kva00b.rfl", "rfrev_kva00c.rfl"),
@@ -61,7 +61,7 @@ namespace LiveSplit.RedFaction
 			}),
 		};
 
-		public static Mod[] Mods;
+		public Mod[] Mods;
 
 		public RedFactionSettings()
 		{
@@ -81,6 +81,11 @@ namespace LiveSplit.RedFaction
 			this.AutoReset = DEFAULT_AUTORESET;
 			this.AutoStart = DEFAULT_AUTOSTART;
 			this.ModIndex = DEFAULT_MODINDEX;
+			this.Mods = new Mod[DEFAULT_MODS.Length];
+			for (int i = 0; i < Mods.Length; i++)
+			{
+				Mods[i] = (Mod)DEFAULT_MODS[i].Clone();
+			}
 		}
 
 		public XmlNode GetSettings(XmlDocument doc)
@@ -174,8 +179,6 @@ namespace LiveSplit.RedFaction
 			}
 			return default_;
 		}
-
-
 
 		static XmlElement ToElement<T>(XmlDocument document, string name, T value)
 		{

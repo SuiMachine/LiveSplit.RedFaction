@@ -2,7 +2,7 @@
 {
 	internal static class MathStuff
 	{
-		internal static int Clamp(this int value, int min, int max)
+		internal static int Clamp(int value, int min, int max)
 		{
 			if (value > max)
 				return max;

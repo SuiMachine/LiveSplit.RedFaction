@@ -1,17 +1,14 @@
 ﻿using LiveSplit.Model;
-using LiveSplit.TimeFormatters;
-using LiveSplit.UI.Components;
 using LiveSplit.UI;
+using LiveSplit.UI.Components;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Xml;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace LiveSplit.RedFaction
 {
-    class RedFactionComponent : LogicComponent
+	class RedFactionComponent : LogicComponent
     {
         public override string ComponentName
         {
@@ -58,7 +55,6 @@ namespace LiveSplit.RedFaction
             {
                 _gameMemory.Stop();
             }
-
         }
 
         private void timer_OnStart(object sender, EventArgs e)
@@ -97,14 +93,14 @@ namespace LiveSplit.RedFaction
             _state.IsGameTimePaused = false;
         }
 
-        void gameMemory_OnSplitCompleted(object sender, GameMemory.SplitArea split, uint frame)
+        void gameMemory_OnSplitCompleted(object sender, int split, uint frame)
         {
-            Debug.WriteLineIf(split != GameMemory.SplitArea.None, String.Format("[NoLoads] Trying to split {0}, State: {1} - {2}", split, _gameMemory.splitStates[(int)split], frame));
-            if (_state.CurrentPhase == TimerPhase.Running && !_gameMemory.splitStates[(int)split])
+            Debug.Write(string.Format("[NoLoads] Trying to split {0}, State: {1} - {2}", split, _gameMemory.splitStates[(int)split], frame));
+            if (_state.CurrentPhase == TimerPhase.Running && !_gameMemory.splitStates[split])
             {
-                Trace.WriteLine(String.Format("[NoLoads] {0} Split - {1}", split, frame));
+                Debug.WriteLine(string.Format("[NoLoads] {0} Split - {1}", split, frame));
                 _timer.Split();
-                _gameMemory.splitStates[(int)split] = true;
+                _gameMemory.splitStates[split] = true;
             }
         }
 
