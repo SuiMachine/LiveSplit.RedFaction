@@ -26,7 +26,7 @@ namespace LiveSplit.RedFaction
 			var newSplits = new List<SplitStructOverall>();
 			for(int i=0; i<this.Splits.Count; i++)
 			{
-				newSplits.Add((SplitStructOverall)this.Splits[i].Clone());
+				newSplits.Add(this.Splits[i].Clone());
 			}
 			
 			return new Mod(this.ModName, newSplits);
@@ -36,7 +36,7 @@ namespace LiveSplit.RedFaction
 	}
 
 	[Serializable]
-	public class SplitStructOverall : ICloneable
+	public abstract class SplitStructOverall
 	{
 		[XmlAttribute] public bool Split { get; set; }
 		[XmlAttribute] public string Name { get; set; }
@@ -47,15 +47,9 @@ namespace LiveSplit.RedFaction
 			Name = "";
 		}
 
-		public object Clone()
-		{
-			return new SplitStructOverall() { Split = this.Split, Name = this.Name };
-		}
+		public abstract SplitStructOverall Clone();
 
-		internal virtual bool Check(in string levelName, in string prevLevelName, in bool isMoviePlaying)
-		{
-			return false;
-		}
+		internal abstract bool Check(in string levelName, in string prevLevelName, in bool isMoviePlaying);
 	}
 
 	[Serializable]
@@ -80,9 +74,14 @@ namespace LiveSplit.RedFaction
 			this.CurrentLevelName = CurrentLevelName;
 		}
 
+		public override SplitStructOverall Clone()
+		{
+			return new SplitLevelChange() { Split = this.Split, Name = this.Name, PreviousLevelName = this.PreviousLevelName, CurrentLevelName = this.CurrentLevelName };
+		}
+
 		internal override bool Check(in string levelName, in string prevLevelName, in bool isMoviePlaying)
 		{
-			if (this.CurrentLevelName == levelName && this.PreviousLevelName == prevLevelName)
+			if (this.Split && this.CurrentLevelName == levelName && this.PreviousLevelName == prevLevelName)
 				return true;
 			else
 				return false;
@@ -108,9 +107,14 @@ namespace LiveSplit.RedFaction
 			this.CurrentLevelName = CurrentLevelName;
 		}
 
+		public override SplitStructOverall Clone()
+		{
+			return new SplitVideoPlays() { Split = this.Split, Name = this.Name, CurrentLevelName = this.CurrentLevelName };
+		}
+
 		internal override bool Check(in string levelName, in string prevLevelName, in bool isMoviePlaying)
 		{
-			if (isMoviePlaying && this.CurrentLevelName == levelName)
+			if (this.Split && isMoviePlaying && this.CurrentLevelName == levelName)
 				return true;
 			else
 				return false;

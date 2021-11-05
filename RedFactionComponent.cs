@@ -95,7 +95,7 @@ namespace LiveSplit.RedFaction
 
         void gameMemory_OnSplitCompleted(object sender, int split, uint frame)
         {
-            Debug.Write(string.Format("[NoLoads] Trying to split {0}, State: {1} - {2}", split, _gameMemory.splitStates[(int)split], frame));
+            Debug.WriteLine(string.Format("[NoLoads] Trying to split {0}, State: {1} - {2}", split, _gameMemory.splitStates[(int)split], frame));
             if (_state.CurrentPhase == TimerPhase.Running && !_gameMemory.splitStates[split])
             {
                 Debug.WriteLine(string.Format("[NoLoads] {0} Split - {1}", split, frame));

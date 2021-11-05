@@ -211,7 +211,7 @@ namespace LiveSplit.RedFaction
                         }
 
 
-                        Debug.WriteLineIf(levelName != prevLevelName, String.Format("[NoLoads] streamGroupId changed from {0} to {1} - {2}", prevLevelName, levelName, frameCounter));
+                        Debug.WriteLineIf(levelName != prevLevelName, String.Format("[NoLoads] Level name changed from {0} to {1} - {2}", prevLevelName, levelName, frameCounter));
                         prevLevelName = levelName;
                         prevIsLoading = isLoading;
                         prevIsMoviePlaying = isMoviePlaying;
@@ -237,7 +237,6 @@ namespace LiveSplit.RedFaction
         private void Split(int split, uint frame)
         {
             Debug.WriteLine(String.Format("[NoLoads] split {0} - {1}", split, frame));
-            splitStates[split] = true;
             _uiThread.Post(d =>
             {
                 if (this.OnSplitCompleted != null)
