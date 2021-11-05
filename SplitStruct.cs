@@ -4,10 +4,10 @@ using System.Xml.Serialization;
 
 namespace LiveSplit.RedFaction
 {
-	public class Mod
+	public class Mod : ICloneable
 	{
 		[XmlAttribute] public string ModName;
-		[XmlArrayItem] public SplitStructOverall[] Splits;
+		[XmlArrayItem] public List<SplitStructOverall> Splits;
 
 		public Mod()
 		{
@@ -15,25 +15,41 @@ namespace LiveSplit.RedFaction
 			Splits = null;
 		}
 
-		public Mod(string ModName, SplitStructOverall[] Splits)
+		public Mod(string ModName, List<SplitStructOverall> Splits)
 		{
 			this.ModName = ModName;
 			this.Splits = Splits;
+		}
+
+		public object Clone()
+		{
+			var newSplits = new List<SplitStructOverall>();
+			for(int i=0; i<this.Splits.Count; i++)
+			{
+				newSplits.Add((SplitStructOverall)this.Splits[i].Clone());
+			}
+			
+			return new Mod(this.ModName, newSplits);
 		}
 
 		public override string ToString() => ModName;
 	}
 
 	[Serializable]
-	public class SplitStructOverall
+	public class SplitStructOverall : ICloneable
 	{
-		[XmlAttribute] public bool Split;
-		[XmlAttribute] public string Name;
+		[XmlAttribute] public bool Split { get; set; }
+		[XmlAttribute] public string Name { get; set; }
 
 		public SplitStructOverall()
 		{
 			Split = false;
 			Name = "";
+		}
+
+		public object Clone()
+		{
+			return new SplitStructOverall() { Split = this.Split, Name = this.Name };
 		}
 	}
 
