@@ -99,7 +99,7 @@ namespace LiveSplit.RedFaction
 			settingsNode.AppendChild(ToElement(doc, "AutoReset", this.AutoReset));
 			settingsNode.AppendChild(ToElement(doc, "AutoStart", this.AutoStart));
 			settingsNode.AppendChild(ToElement(doc, "ModIndex", this.ModIndex));
-			settingsNode.AppendChild(ToElement(doc, "ModStates", DEFAULT_MODS));
+			settingsNode.AppendChild(ToElement(doc, "ModStates", this.Mods));
 
 			return settingsNode;
 		}
@@ -108,7 +108,7 @@ namespace LiveSplit.RedFaction
 		{
 			this.AutoReset = ParseBool(settings, "AutoReset", DEFAULT_AUTORESET);
 			this.AutoStart = ParseBool(settings, "AutoStart", DEFAULT_AUTOSTART);
-			this.ModIndex = ParseInt(settings, "ModIndex", DEFAULT_MODINDEX, 0, DEFAULT_MODS.Length -1);
+			this.ModIndex = ParseInt(settings, "ModIndex", DEFAULT_MODINDEX, 0, DEFAULT_MODS.Length - 1);
 			Mods = ParseXML(settings, "ModStates", DEFAULT_MODS);
 		}
 
@@ -125,24 +125,24 @@ namespace LiveSplit.RedFaction
 			else
 			{
 				var node = settings[setting];
-				foreach(XmlElement mod in node)
+				foreach (XmlElement mod in node)
 				{
 					var modName = mod.Attributes["Name"];
-					if(modName != null)
+					if (modName != null)
 					{
 						var foundMod = modParse.FirstOrDefault(x => x.ModName == modName.InnerText);
-						if(foundMod != null)
+						if (foundMod != null)
 						{
-							if(mod["Splits"] != null)
+							if (mod["Splits"] != null)
 							{
 								var splitsNode = mod["Splits"];
-								foreach(XmlElement split in splitsNode)
+								foreach (XmlElement split in splitsNode)
 								{
-									if(split.Attributes["Name"] != null)
+									if (split.Attributes["Name"] != null)
 									{
 										var splitName = split.Attributes["Name"];
 										var foundSplit = foundMod.Splits.FirstOrDefault(x => x.Name == splitName.InnerText);
-										if(foundSplit != null)
+										if (foundSplit != null)
 										{
 											foundSplit.Split = bool.TryParse(split.InnerText, out var parsedVal) ? parsedVal : false;
 										}
@@ -171,7 +171,7 @@ namespace LiveSplit.RedFaction
 			if (settings[setting] != null)
 			{
 				if (int.TryParse(settings[setting].InnerText, out val))
-				{ 
+				{
 					val = MathStuff.Clamp(val, min, max);
 					return val;
 				}
@@ -193,7 +193,7 @@ namespace LiveSplit.RedFaction
 		{
 			//God help me
 			XmlElement str = document.CreateElement(name);
-			for(int i=0; i<value.Length; i++)
+			for (int i = 0; i < value.Length; i++)
 			{
 				var node = ToElement(document, value[i]);
 				str.AppendChild(node);
@@ -216,7 +216,7 @@ namespace LiveSplit.RedFaction
 		static XmlElement ToElement(XmlDocument document, List<SplitStructOverall> value)
 		{
 			XmlElement str = document.CreateElement("Splits");
-			for(int i=0; i<value.Count; i++)
+			for (int i = 0; i < value.Count; i++)
 			{
 				var node = ToElement(document, value[i]);
 				str.AppendChild(node);
@@ -234,16 +234,28 @@ namespace LiveSplit.RedFaction
 			return str;
 		}
 
+		private bool Initializing;
+
 		private void Cbox_Mod_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			CBList_Splits.DataSource = Mods[((ComboBox)sender).SelectedIndex].Splits;
 			CBList_Splits.DisplayMember = "Name";
 			CBList_Splits.ValueMember = "Split";
 
+			Initializing = true;
 			for (int i = 0; i < CBList_Splits.Items.Count; i++)
 			{
 				var obj = (SplitStructOverall)CBList_Splits.Items[i];
 				CBList_Splits.SetItemChecked(i, obj.Split);
+			}
+			Initializing = false;
+		}
+
+		private void CBList_Splits_ItemCheck(object sender, ItemCheckEventArgs e)
+		{
+			if (!Initializing)
+			{
+				CurrentSplits[e.Index].Split = e.NewValue == CheckState.Checked;
 			}
 		}
 	}

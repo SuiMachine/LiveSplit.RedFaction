@@ -67,6 +67,7 @@
 			this.CBList_Splits.Name = "CBList_Splits";
 			this.CBList_Splits.Size = new System.Drawing.Size(444, 414);
 			this.CBList_Splits.TabIndex = 0;
+			this.CBList_Splits.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CBList_Splits_ItemCheck);
 			// 
 			// gbStartSplits
 			// 
