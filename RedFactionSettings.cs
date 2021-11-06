@@ -58,6 +58,7 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Central Command - Level 1", "rfrev_kva07.rfl", "rfrev_kva08.rfl"),
 				new SplitLevelChange("Central Command - Level 2", "rfrev_kva08.rfl", "rfrev_kva09.rfl"),
 				new SplitLevelChange("Central Command - Level 3", "rfrev_kva09.rfl", "rfrev_kva10.rfl"),
+				new SplitLevelChange("Docking Bay Finale", "rfrev_kva10.rfl", "rfrev_kvaend.rfl")
 			}),
 		};
 

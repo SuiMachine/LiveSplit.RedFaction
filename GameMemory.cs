@@ -138,7 +138,11 @@ namespace LiveSplit.RedFaction
 
                         if (levelName != prevLevelName && levelName != null || isMoviePlaying != prevIsLoading)
                         {
-                            for(int i=0; i<splitStates.Length; i++)
+#if DEBUG
+                            Debug.WriteIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
+#endif
+
+                            for (int i=0; i<splitStates.Length; i++)
 							{
                                 if(!splitStates[i] && currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying))
 								{
@@ -154,7 +158,9 @@ namespace LiveSplit.RedFaction
                         {
                             if (isLoading)
                             {
-                                Debug.WriteLine(String.Format("[NoLoads] Load Start - {0}", frameCounter));
+#if DEBUG
+                                Debug.WriteLine("[NoLoads] Load Start - {frameCounter}");
+#endif
 
                                 loadingStarted = true;
 
@@ -181,7 +187,9 @@ namespace LiveSplit.RedFaction
                             }
                             else
                             {
-                                Debug.WriteLine(String.Format("[NoLoads] Load End - {0}", frameCounter));
+#if DEBUG
+                                Debug.WriteLine($"[NoLoads] Load End - {frameCounter}");
+#endif
                                 if (loadingStarted)
                                 {
                                     loadingStarted = false;
@@ -210,8 +218,6 @@ namespace LiveSplit.RedFaction
                             }
                         }
 
-
-                        Debug.WriteLineIf(levelName != prevLevelName, String.Format("[NoLoads] Level name changed from {0} to {1} - {2}", prevLevelName, levelName, frameCounter));
                         prevLevelName = levelName;
                         prevIsLoading = isLoading;
                         prevIsMoviePlaying = isMoviePlaying;
@@ -236,7 +242,9 @@ namespace LiveSplit.RedFaction
 
         private void Split(int split, uint frame)
         {
-            Debug.WriteLine(String.Format("[NoLoads] split {0} - {1}", split, frame));
+#if DEBUG
+            Debug.WriteLine($"[NoLoads] split {split} ({currentSplits[split].Name}) - {frame}");
+#endif
             _uiThread.Post(d =>
             {
                 if (this.OnSplitCompleted != null)
