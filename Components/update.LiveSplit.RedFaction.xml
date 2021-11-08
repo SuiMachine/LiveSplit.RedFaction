@@ -1,4 +1,12 @@
 <updates>
+	<update version="1.2.0">
+	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
+		<changelog>
+			<change>Reworked how the splits are definied, to make it easier to expend autosplitter with mods.</change>
+			<change>Fixed a bug with game time being incorrectly initialized (it wasn't noticable with a base game and it has not affected no load time in the base game).</change>
+			<change>Added support for Kava mod.</change>
+		</changelog>
+	</update>
 	<update version="1.1.0">
 	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
 		<changelog>

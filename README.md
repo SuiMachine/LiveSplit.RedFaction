@@ -36,6 +36,10 @@ Change Log
 ----------
 https://github.com/SuiMachine/LiveSplit.RedFaction/releases
 
+Adding support for other mods
+----------
+To add other mods, see [https://github.com/SuiMachine/LiveSplit.RedFaction/wiki](https://github.com/SuiMachine/LiveSplit.RedFaction/wiki).
+
 Credits
 -------
   * [SuicideMachine](http://twitch.tv/suicidemachine)

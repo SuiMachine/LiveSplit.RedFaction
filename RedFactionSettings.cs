@@ -1,182 +1,263 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 
 namespace LiveSplit.RedFaction
 {
-    public partial class RedFactionSettings : UserControl
-    {
-        public bool AutoReset { get; set; }
-        public bool AutoStart { get; set; }
-        public bool sC01 { get; set; }
-        public bool sC02 { get; set; }
-        public bool sC03 { get; set; }
-        public bool sC04 { get; set; }
-        public bool sC05 { get; set; }
-        public bool sC06 { get; set; }
-        public bool sC07 { get; set; }
-        public bool sC08 { get; set; }
-        public bool sC09 { get; set; }
-        public bool sC10 { get; set; }
-        public bool sC11 { get; set; }
-        public bool sC12 { get; set; }
-        public bool sC13 { get; set; }
-        public bool sC14 { get; set; }
-        public bool sC15 { get; set; }
-        public bool sC16 { get; set; }
-        public bool sC17 { get; set; }
-        public bool sC18 { get; set; }
-        public bool sC19 { get; set; }
-        public bool sCBomb { get; set; }
+	public partial class RedFactionSettings : UserControl
+	{
+		public bool AutoReset { get; set; }
+		public bool AutoStart { get; set; }
+		public int ModIndex { get; set; }
 
-        private const bool DEFAULT_AUTORESET = false;
-        private const bool DEFAULT_AUTOSTART = true;
-        private const bool DEFAULT_C01 = true;
-        private const bool DEFAULT_C02 = true;
-        private const bool DEFAULT_C03 = true;
-        private const bool DEFAULT_C04 = true;
-        private const bool DEFAULT_C05 = true;
-        private const bool DEFAULT_C06 = true;
-        private const bool DEFAULT_C07 = true;
-        private const bool DEFAULT_C08 = true;
-        private const bool DEFAULT_C09 = true;
-        private const bool DEFAULT_C10 = true;
-        private const bool DEFAULT_C11 = true;
-        private const bool DEFAULT_C12 = true;
-        private const bool DEFAULT_C13 = true;
-        private const bool DEFAULT_C14 = true;
-        private const bool DEFAULT_C15 = true;
-        private const bool DEFAULT_C16 = true;
-        private const bool DEFAULT_C17 = true;
-        private const bool DEFAULT_C18 = true;
-        private const bool DEFAULT_C19 = true;
-        private const bool DEFAULT_CBomb = true;
+		private const bool DEFAULT_AUTORESET = false;
+		private const bool DEFAULT_AUTOSTART = true;
+		private const int DEFAULT_MODINDEX = 0;
+		private static readonly Mod[] DEFAULT_MODS = new Mod[]
+		{
+			new Mod("Base Game", new List<SplitStructOverall>()
+			{
+				new SplitLevelChange("Chapter 1 (Mines)", "l1s3.rfl", "l2s1.rfl"),
+				new SplitLevelChange("Chapter 2 (Barracks)", "l2s3.rfl", "l3s1.rfl"),
+				new SplitLevelChange("Chapter 3 (Reception && Docks)", "l3s4.rfl", "l4s1a.rfl"),
+				new SplitLevelChange("Chapter 4 (Ventilation)", "l4s4.rfl", "l5s1.rfl"),
+				new SplitLevelChange("Chapter 5 (Geothermal Plant)", "l5s4.rfl", "l6s1.rfl"),
+				new SplitLevelChange("Chapter 6 (Administration)", "l6s3.rfl", "l7s1.rfl"),
+				new SplitLevelChange("Chapter 7 (Backstage)", "l7s4.rfl", "l8s1.rfl"),
+				new SplitLevelChange("Chapter 8 (Medical Labs)", "l8s4.rfl", "l9s1.rfl"),
+				new SplitLevelChange("Chapter 9 (Caves)", "l9s4.rfl", "l10s1.rfl"),
+				new SplitLevelChange("Chapter 10 (The \"Zoo\")", "l10s4.rfl", "l11s1.rfl"),
+				new SplitLevelChange("Chapter 11 (Capek\'s Secret Facility)", "l11s3.rfl", "l12s1.rfl"),
+				new SplitLevelChange("Chapter 12 (Canion)", "l12s1.rfl", "l13s1.rfl"),
+				new SplitLevelChange("Chapter 13 (Satelite Control)", "l13s3.rfl", "l14s1.rfl"),
+				new SplitLevelChange("Chapter 14 (Missile Command Center)", "l14s3.rfl", "l15s1.rfl"),
+				new SplitLevelChange("Chapter 15 (Catch a Shuttle)", "l15s4.rfl", "l17s1.rfl"), //Chapter 16 missing, don't panic
+				new SplitLevelChange("Chapter 16 (Space Station)", "l17s4.rfl", "l18s1.rfl"),
+				new SplitLevelChange("Chapter 17 (Back on Mars)", "l18s3.rfl", "l19s1.rfl"),
+				new SplitLevelChange("Chapter 18 (Merc\'s Base)", "l19s3.rfl", "l20s1.rfl"),
+				new SplitLevelChange("Chapter 19 (Finale)", "l20s2.rfl", "l20s3.rfl"),
+				new SplitVideoPlays("A Bomb!", "l20s3.rfl")
+			}),
+			new Mod("Kava", new List<SplitStructOverall>()
+			{
+				new SplitLevelChange("Tram Station", "l1s1.rfl", "rfrev_kva00b.rfl"),
+				new SplitLevelChange("Surface of the Red Planet", "rfrev_kva00b.rfl", "rfrev_kva00c.rfl"),
+				new SplitLevelChange("Generator Room", "rfrev_kva00c.rfl", "rfrev_kva00d.rfl"),
+				new SplitLevelChange("Power Plant", "rfrev_kva00d.rfl", "rfrev_kva00e.rfl"),
+				new SplitLevelChange("Research Facility", "rfrev_kva00e.rfl", "rfrev_kva00f.rfl"),
+				new SplitLevelChange("Solar Array", "rfrev_kva00f.rfl", "rfrev_kva01.rfl"),
+				new SplitLevelChange("Storage Depot", "rfrev_kva01.rfl", "rfrev_kva02.rfl"),
+				new SplitLevelChange("Barracks Basement", "rfrev_kva02.rfl", "rfrev_kva03.rfl"),
+				new SplitLevelChange("Sewer Flow Control", "rfrev_kva03.rfl", "rfrev_kva04.rfl"),
+				new SplitLevelChange("Sewer Control Area", "rfrev_kva04.rfl", "rfrev_kva05.rfl"),
+				new SplitLevelChange("Sewage Treatment Plant", "rfrev_kva05.rfl", "rfrev_kva06.rfl"),
+				new SplitLevelChange("Storage Area", "rfrev_kva06.rfl", "rfrev_kva07.rfl"),
+				new SplitLevelChange("Central Command - Level 1", "rfrev_kva07.rfl", "rfrev_kva08.rfl"),
+				new SplitLevelChange("Central Command - Level 2", "rfrev_kva08.rfl", "rfrev_kva09.rfl"),
+				new SplitLevelChange("Central Command - Level 3", "rfrev_kva09.rfl", "rfrev_kva10.rfl"),
+				new SplitLevelChange("Docking Bay Finale", "rfrev_kva10.rfl", "rfrev_kvaend.rfl")
+			}),
+		};
 
-        public RedFactionSettings()
-        {
-            InitializeComponent();
+		public Mod[] Mods;
 
-            this.chkAutoReset.DataBindings.Add("Checked", this, "AutoReset", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chkAutoStart.DataBindings.Add("Checked", this, "AutoStart", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk01.DataBindings.Add("Checked", this, "sC01", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk02.DataBindings.Add("Checked", this, "sC02", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk03.DataBindings.Add("Checked", this, "sC03", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk04.DataBindings.Add("Checked", this, "sC04", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk05.DataBindings.Add("Checked", this, "sC05", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk06.DataBindings.Add("Checked", this, "sC06", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk07.DataBindings.Add("Checked", this, "sC07", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk08.DataBindings.Add("Checked", this, "sC08", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk09.DataBindings.Add("Checked", this, "sC09", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk10.DataBindings.Add("Checked", this, "sC10", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk11.DataBindings.Add("Checked", this, "sC11", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk12.DataBindings.Add("Checked", this, "sC12", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk13.DataBindings.Add("Checked", this, "sC13", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk14.DataBindings.Add("Checked", this, "sC14", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk15.DataBindings.Add("Checked", this, "sC15", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk16.DataBindings.Add("Checked", this, "sC16", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk17.DataBindings.Add("Checked", this, "sC17", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk18.DataBindings.Add("Checked", this, "sC18", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk19.DataBindings.Add("Checked", this, "sC19", false, DataSourceUpdateMode.OnPropertyChanged);
-            this.chk20.DataBindings.Add("Checked", this, "sCBomb", false, DataSourceUpdateMode.OnPropertyChanged);
+		public List<SplitStructOverall> CurrentSplits => Mods[ModIndex].Splits;
 
-            // defaults
-            this.AutoReset = DEFAULT_AUTORESET;
-            this.AutoStart = DEFAULT_AUTOSTART;
-            this.sC01 = DEFAULT_C01;
-            this.sC02 = DEFAULT_C02;
-            this.sC03 = DEFAULT_C03;
-            this.sC04 = DEFAULT_C04;
-            this.sC05 = DEFAULT_C05;
-            this.sC06 = DEFAULT_C06;
-            this.sC07 = DEFAULT_C07;
-            this.sC08 = DEFAULT_C08;
-            this.sC09 = DEFAULT_C09;
-            this.sC10 = DEFAULT_C10;
-            this.sC11 = DEFAULT_C11;
-            this.sC12 = DEFAULT_C12;
-            this.sC13 = DEFAULT_C13;
-            this.sC14 = DEFAULT_C14;
-            this.sC15 = DEFAULT_C15;
-            this.sC16 = DEFAULT_C16;
-            this.sC17 = DEFAULT_C17;
-            this.sC18 = DEFAULT_C18;
-            this.sC19 = DEFAULT_C19;
-            this.sCBomb = DEFAULT_CBomb;
-        }
+		public RedFactionSettings()
+		{
+			InitializeComponent();
 
-        public XmlNode GetSettings(XmlDocument doc)
-        {
-            XmlElement settingsNode = doc.CreateElement("Settings");
+			this.chkAutoReset.DataBindings.Add("Checked", this, "AutoReset", false, DataSourceUpdateMode.OnPropertyChanged);
+			this.chkAutoStart.DataBindings.Add("Checked", this, "AutoStart", false, DataSourceUpdateMode.OnPropertyChanged);
+			this.Cbox_Mod.Items.Clear();
+			foreach (var mod in DEFAULT_MODS)
+			{
+				this.Cbox_Mod.Items.Add(mod);
+			}
 
-            settingsNode.AppendChild(ToElement(doc, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
+			this.Cbox_Mod.DataBindings.Add("SelectedIndex", this, "ModIndex", false, DataSourceUpdateMode.OnPropertyChanged);
 
-            settingsNode.AppendChild(ToElement(doc, "AutoReset", this.AutoReset));
-            settingsNode.AppendChild(ToElement(doc, "AutoStart", this.AutoStart));
-            settingsNode.AppendChild(ToElement(doc, "C1", this.sC01));
-            settingsNode.AppendChild(ToElement(doc, "C2", this.sC02));
-            settingsNode.AppendChild(ToElement(doc, "C3", this.sC03));
-            settingsNode.AppendChild(ToElement(doc, "C4", this.sC04));
-            settingsNode.AppendChild(ToElement(doc, "C5", this.sC05));
-            settingsNode.AppendChild(ToElement(doc, "C6", this.sC06));
-            settingsNode.AppendChild(ToElement(doc, "C7", this.sC07));
-            settingsNode.AppendChild(ToElement(doc, "C8", this.sC08));
-            settingsNode.AppendChild(ToElement(doc, "C9", this.sC09));
-            settingsNode.AppendChild(ToElement(doc, "C10", this.sC10));
-            settingsNode.AppendChild(ToElement(doc, "C10", this.sC10));
-            settingsNode.AppendChild(ToElement(doc, "C11", this.sC11));
-            settingsNode.AppendChild(ToElement(doc, "C12", this.sC12));
-            settingsNode.AppendChild(ToElement(doc, "C13", this.sC13));
-            settingsNode.AppendChild(ToElement(doc, "C14", this.sC14));
-            settingsNode.AppendChild(ToElement(doc, "C15", this.sC15));
-            settingsNode.AppendChild(ToElement(doc, "C16", this.sC16));
-            settingsNode.AppendChild(ToElement(doc, "C17", this.sC17));
-            settingsNode.AppendChild(ToElement(doc, "C18", this.sC18));
-            settingsNode.AppendChild(ToElement(doc, "C19", this.sC19));
-            settingsNode.AppendChild(ToElement(doc, "JCItsABomb", this.chk20));
+			// defaults
+			this.AutoReset = DEFAULT_AUTORESET;
+			this.AutoStart = DEFAULT_AUTOSTART;
+			this.ModIndex = DEFAULT_MODINDEX;
+			this.Mods = new Mod[DEFAULT_MODS.Length];
+			for (int i = 0; i < Mods.Length; i++)
+			{
+				Mods[i] = (Mod)DEFAULT_MODS[i].Clone();
+			}
+		}
 
-            return settingsNode;
-        }
+		public XmlNode GetSettings(XmlDocument doc)
+		{
+			XmlElement settingsNode = doc.CreateElement("Settings");
 
-        public void SetSettings(XmlNode settings)
-        {
-            this.AutoReset = ParseBool(settings, "AutoReset", DEFAULT_AUTORESET);
-            this.AutoStart = ParseBool(settings, "AutoStart", DEFAULT_AUTOSTART);
-            this.sC01 = ParseBool(settings, "C1", DEFAULT_C01);
-            this.sC02 = ParseBool(settings, "C2", DEFAULT_C02);
-            this.sC03 = ParseBool(settings, "C3", DEFAULT_C03);
-            this.sC04 = ParseBool(settings, "C4", DEFAULT_C04);
-            this.sC05 = ParseBool(settings, "C5", DEFAULT_C05);
-            this.sC06 = ParseBool(settings, "C6", DEFAULT_C06);
-            this.sC07 = ParseBool(settings, "C7", DEFAULT_C07);
-            this.sC08 = ParseBool(settings, "C8", DEFAULT_C08);
-            this.sC09 = ParseBool(settings, "C9", DEFAULT_C09);
-            this.sC10 = ParseBool(settings, "C10", DEFAULT_C10);
-            this.sC11 = ParseBool(settings, "C11", DEFAULT_C11);
-            this.sC12 = ParseBool(settings, "C12", DEFAULT_C12);
-            this.sC13 = ParseBool(settings, "C13", DEFAULT_C13);
-            this.sC14 = ParseBool(settings, "C14", DEFAULT_C14);
-            this.sC15 = ParseBool(settings, "C15", DEFAULT_C15);
-            this.sC16 = ParseBool(settings, "C16", DEFAULT_C16);
-            this.sC17 = ParseBool(settings, "C17", DEFAULT_C17);
-            this.sC18 = ParseBool(settings, "C18", DEFAULT_C18);
-            this.sC19 = ParseBool(settings, "C19", DEFAULT_C19);
-            this.sCBomb = ParseBool(settings, "JCItsABomb", DEFAULT_CBomb);
-        }
+			settingsNode.AppendChild(ToElement(doc, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
 
-        static bool ParseBool(XmlNode settings, string setting, bool default_ = false)
-        {
-            bool val;
-            return settings[setting] != null ?
-                (Boolean.TryParse(settings[setting].InnerText, out val) ? val : default_)
-                : default_;
-        }
+			settingsNode.AppendChild(ToElement(doc, "AutoReset", this.AutoReset));
+			settingsNode.AppendChild(ToElement(doc, "AutoStart", this.AutoStart));
+			settingsNode.AppendChild(ToElement(doc, "ModIndex", this.ModIndex));
+			settingsNode.AppendChild(ToElement(doc, "ModStates", this.Mods));
 
-        static XmlElement ToElement<T>(XmlDocument document, string name, T value)
-        {
-            XmlElement str = document.CreateElement(name);
-            str.InnerText = value.ToString();
-            return str;
-        }
-    }
+			return settingsNode;
+		}
+
+		public void SetSettings(XmlNode settings)
+		{
+			this.AutoReset = ParseBool(settings, "AutoReset", DEFAULT_AUTORESET);
+			this.AutoStart = ParseBool(settings, "AutoStart", DEFAULT_AUTOSTART);
+			this.ModIndex = ParseInt(settings, "ModIndex", DEFAULT_MODINDEX, 0, DEFAULT_MODS.Length - 1);
+			Mods = ParseXML(settings, "ModStates", DEFAULT_MODS);
+		}
+
+		private Mod[] ParseXML(XmlNode settings, string setting, Mod[] default_)
+		{
+			var modParse = new Mod[default_.Length];
+			for (int i = 0; i < modParse.Length; i++)
+			{
+				modParse[i] = (Mod)default_[i].Clone();
+			}
+
+			if (settings[setting] is null)
+				return modParse;
+			else
+			{
+				var node = settings[setting];
+				foreach (XmlElement mod in node)
+				{
+					var modName = mod.Attributes["Name"];
+					if (modName != null)
+					{
+						var foundMod = modParse.FirstOrDefault(x => x.ModName == modName.InnerText);
+						if (foundMod != null)
+						{
+							if (mod["Splits"] != null)
+							{
+								var splitsNode = mod["Splits"];
+								foreach (XmlElement split in splitsNode)
+								{
+									if (split.Attributes["Name"] != null)
+									{
+										var splitName = split.Attributes["Name"];
+										var foundSplit = foundMod.Splits.FirstOrDefault(x => x.Name == splitName.InnerText);
+										if (foundSplit != null)
+										{
+											foundSplit.Split = bool.TryParse(split.InnerText, out var parsedVal) ? parsedVal : false;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				return modParse;
+			}
+		}
+
+		static bool ParseBool(XmlNode settings, string setting, bool default_ = false)
+		{
+			bool val;
+			return settings[setting] != null ?
+				(Boolean.TryParse(settings[setting].InnerText, out val) ? val : default_)
+				: default_;
+		}
+
+		static int ParseInt(XmlNode settings, string setting, int default_ = 0, int min = int.MinValue, int max = int.MaxValue)
+		{
+			int val;
+			if (settings[setting] != null)
+			{
+				if (int.TryParse(settings[setting].InnerText, out val))
+				{
+					val = MathStuff.Clamp(val, min, max);
+					return val;
+				}
+				else
+					return default_;
+
+			}
+			return default_;
+		}
+
+		static XmlElement ToElement<T>(XmlDocument document, string name, T value)
+		{
+			XmlElement str = document.CreateElement(name);
+			str.InnerText = value.ToString();
+			return str;
+		}
+
+		static XmlElement ToElement(XmlDocument document, string name, Mod[] value)
+		{
+			//God help me
+			XmlElement str = document.CreateElement(name);
+			for (int i = 0; i < value.Length; i++)
+			{
+				var node = ToElement(document, value[i]);
+				str.AppendChild(node);
+			}
+
+			return str;
+		}
+
+		static XmlElement ToElement(XmlDocument document, Mod value)
+		{
+			XmlElement str = document.CreateElement("Mod");
+			var attr = document.CreateAttribute("Name");
+			attr.InnerText = value.ModName;
+			str.Attributes.Append(attr);
+			var node = ToElement(document, value.Splits);
+			str.AppendChild(node);
+			return str;
+		}
+
+		static XmlElement ToElement(XmlDocument document, List<SplitStructOverall> value)
+		{
+			XmlElement str = document.CreateElement("Splits");
+			for (int i = 0; i < value.Count; i++)
+			{
+				var node = ToElement(document, value[i]);
+				str.AppendChild(node);
+			}
+			return str;
+		}
+
+		static XmlElement ToElement(XmlDocument document, SplitStructOverall value)
+		{
+			XmlElement str = document.CreateElement("Split");
+			var attr = document.CreateAttribute("Name");
+			attr.InnerText = value.Name;
+			str.Attributes.Append(attr);
+			str.InnerText = value.Split.ToString();
+			return str;
+		}
+
+		private bool Initializing;
+
+		private void Cbox_Mod_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			CBList_Splits.DataSource = Mods[((ComboBox)sender).SelectedIndex].Splits;
+			CBList_Splits.DisplayMember = "Name";
+			CBList_Splits.ValueMember = "Split";
+
+			Initializing = true;
+			for (int i = 0; i < CBList_Splits.Items.Count; i++)
+			{
+				var obj = (SplitStructOverall)CBList_Splits.Items[i];
+				CBList_Splits.SetItemChecked(i, obj.Split);
+			}
+			Initializing = false;
+		}
+
+		private void CBList_Splits_ItemCheck(object sender, ItemCheckEventArgs e)
+		{
+			if (!Initializing)
+			{
+				CurrentSplits[e.Index].Split = e.NewValue == CheckState.Checked;
+			}
+		}
+	}
 }

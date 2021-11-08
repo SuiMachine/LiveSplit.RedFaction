@@ -11,36 +11,11 @@ namespace LiveSplit.RedFaction
 {
     class GameMemory
     {
-        public enum SplitArea : int
-        {
-            None,
-            Chapter1,
-            Chapter2,
-            Chapter3,
-            Chapter4,
-            Chapter5,
-            Chapter6,
-            Chapter7,
-            Chapter8,
-            Chapter9,
-            Chapter10,
-            Chapter11,
-            Chapter12,
-            Chapter13,
-            Chapter14,
-            Chapter15,
-            Chapter16,
-            Chapter17,
-            Chapter18,
-            Chapter19,
-            Bomb
-        }
-
         public event EventHandler OnPlayerGainedControl;
         public event EventHandler OnLoadStarted;
         public event EventHandler OnFirstLevelLoading;
         public event EventHandler OnLoadFinished;
-        public delegate void SplitCompletedEventHandler(object sender, SplitArea type, uint frame);
+        public delegate void SplitCompletedEventHandler(object sender, int split, uint frame);
         public event SplitCompletedEventHandler OnSplitCompleted;
 
         private Task _thread;
@@ -61,71 +36,28 @@ namespace LiveSplit.RedFaction
             "rf_120na"
         };
 
-        private static class LevelName
-        {
-            public const string Chapter1Start = "l1s1.rfl";
-            public const string Chapter1Exit = "l1s3.rfl";
-            public const string Chapter2Start = "l2s1.rfl";
-            public const string Chapter2Exit = "l2s3.rfl";
-            public const string Chapter3Start = "l3s1.rfl";
-            public const string Chapter3Exit = "l3s4.rfl";
-            public const string Chapter4Start = "l4s1a.rfl";
-            public const string Chapter4StartB = "l4s1b.rfl";
-            public const string Chapter4Exit = "l4s4.rfl";
-            public const string Chapter5Start = "l5s1.rfl";
-            public const string Chapter5Exit = "l5s4.rfl";
-            public const string Chapter6Start = "l6s1.rfl";         //Administration
-            public const string Chapter6Exit = "l6s3.rfl";
-            public const string Chapter7Start = "l7s1.rfl";         //Backstage
-            public const string Chapter7Exit = "l7s4.rfl";
-            public const string Chapter8Start = "l8s1.rfl";         //Medical Labs
-            public const string Chapter8End = "l8s4.rfl";
-            public const string Chapter9Start = "l9s1.rfl";         //Caves
-            public const string Chapter9End = "l9s4.rfl";
-            public const string Chapter10Start = "l10s1.rfl";         //Zoo
-            public const string Chapter10End = "l10s4.rfl";
-            public const string Chapter11Start = "l11s1.rfl";         //Capek Secret Facility
-            public const string Chapter11End = "l11s3.rfl";
-            public const string Chapter12Start = "l12s1.rfl";         //Canion
-            public const string Chapter13Start = "l13s1.rfl";         //Satelite Control
-            public const string Chapter13End = "l13s3.rfl";
-            public const string Chapter14Start = "l14s1.rfl";         //Missile Command Center
-            public const string Chapter14End = "l14s3.rfl";
-            public const string Chapter15Start = "l15s1.rfl";         //Catch a shuttle
-            public const string Chapter15End = "l15s4.rfl";
-            public const string Chapter16Start = "l17s1.rfl";         //Spacestation (chapter 16 missing in game's files)
-            public const string Chapter16End = "l17s4.rfl";
-            public const string Chapter17Start = "l18s1.rfl";         //Back on Mars
-            public const string Chapter17End = "l18s3.rfl";
-            public const string Chapter18Start = "l19s1.rfl";         //Prision
-            public const string Chapter18End = "l19s3.rfl";
-            public const string Chapter19Start = "l20s1.rfl";         //Merc Base
-            public const string Chapter19End = "l20s2.rfl";
-            public const string Bomb = "l20s3.rfl";           //A bomb
-
-        }
-
         private enum ExpectedDllSizes
         {
             PureFaction30d = 29945856,
             RedFaction1_20 = 29917184
         }
 
+        public List<SplitStructOverall> currentSplits { get; set; }
         public bool[] splitStates { get; set; }
 
         public void resetSplitStates()
         {
-            for (int i = 0; i <= (int)SplitArea.Bomb; i++)
+            for (int i = 0; i < currentSplits.Count; i++)
             {
                 splitStates[i] = false;
             }
-
         }
 
         public GameMemory(RedFactionSettings componentSettings)
         {
             _settings = componentSettings;
-            splitStates = new bool[(int)SplitArea.Bomb + 1];
+            currentSplits = componentSettings.Mods[componentSettings.ModIndex].Splits;
+            splitStates = new bool[currentSplits.Count];
 
             _isLoadingPtr = new DeepPointer(0x13756AC); // == 1 if a loadscreen is happening
             _levelNamePtr = new DeepPointer(0x0246144, 0x0);
@@ -189,7 +121,7 @@ namespace LiveSplit.RedFaction
 
                     bool prevIsLoading = false;
                     bool prevIsMoviePlaying = false;
-                    string prevStreamGroupId = String.Empty;
+                    string prevLevelName = "";
 
 
                     bool loadingStarted = false;
@@ -198,94 +130,25 @@ namespace LiveSplit.RedFaction
                     {
                         bool isLoading;
                         bool isMoviePlaying;
-                        string streamGroupId = String.Empty;
-                        _levelNamePtr.DerefString(game, 10, out streamGroupId);
-                        streamGroupId = streamGroupId != null ? streamGroupId.ToLower() : "";  //cause it can read null if the game started off fresh and then you'd try to convert it to lowercase and would get exception
+                        string levelName = "";
+                        _levelNamePtr.DerefString(game, 32, out levelName);
+                        levelName = levelName != null ? levelName.ToLower() : "";  //cause it can read null if the game started off fresh and then you'd try to convert it to lowercase and would get exception
                         _isLoadingPtr.Deref(game, out isLoading);
                         _binkMoviePlaying.Deref(game, out isMoviePlaying);
 
-                        if (streamGroupId != prevStreamGroupId && streamGroupId != null || isMoviePlaying != prevIsLoading)
+                        if (levelName != prevLevelName && levelName != null || isMoviePlaying != prevIsLoading)
                         {
-                            if (prevStreamGroupId == LevelName.Chapter1Exit && streamGroupId == LevelName.Chapter2Start)        //Mines
-                            {
-                                Split(SplitArea.Chapter1, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter2Exit && streamGroupId == LevelName.Chapter3Start)   //Barracks
-                            {
-                                Split(SplitArea.Chapter2, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter3Exit && streamGroupId == LevelName.Chapter4Start)   //Reception & Docks
-                            {
-                                Split(SplitArea.Chapter3, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter4Exit && streamGroupId == LevelName.Chapter5Start)   //Ventilation
-                            {
-                                Split(SplitArea.Chapter4, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter5Exit && streamGroupId == LevelName.Chapter6Start)  //Geothermal Plant
-                            {
-                                Split(SplitArea.Chapter5, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter6Exit && streamGroupId == LevelName.Chapter7Start)
-                            {
-                                Split(SplitArea.Chapter6, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter7Exit && streamGroupId == LevelName.Chapter8Start)
-                            {
-                                Split(SplitArea.Chapter7, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter8End && streamGroupId == LevelName.Chapter9Start)
-                            {
-                                Split(SplitArea.Chapter8, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter9End && streamGroupId == LevelName.Chapter10Start)
-                            {
-                                Split(SplitArea.Chapter9, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter10End && streamGroupId == LevelName.Chapter11Start)
-                            {
-                                Split(SplitArea.Chapter10, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter11End && streamGroupId == LevelName.Chapter12Start)
-                            {
-                                Split(SplitArea.Chapter11, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter12Start && streamGroupId == LevelName.Chapter13Start)
-                            {
-                                Split(SplitArea.Chapter12, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter13End && streamGroupId == LevelName.Chapter14Start)
-                            {
-                                Split(SplitArea.Chapter13, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter14End && streamGroupId == LevelName.Chapter15Start)
-                            {
-                                Split(SplitArea.Chapter14, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter15End && streamGroupId == LevelName.Chapter16Start)
-                            {
-                                Split(SplitArea.Chapter15, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter16End && streamGroupId == LevelName.Chapter17Start)
-                            {
-                                Split(SplitArea.Chapter16, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter17End && streamGroupId == LevelName.Chapter18Start)
-                            {
-                                Split(SplitArea.Chapter17, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter18End && streamGroupId == LevelName.Chapter19Start)
-                            {
-                                Split(SplitArea.Chapter18, frameCounter);
-                            }
-                            else if (prevStreamGroupId == LevelName.Chapter19End && streamGroupId == LevelName.Bomb)
-                            {
-                                Split(SplitArea.Chapter19, frameCounter);
-                            }
-                            else if (streamGroupId == LevelName.Bomb && isMoviePlaying)
-                            {
-                                Split(SplitArea.Bomb, frameCounter);
-                            }
+#if DEBUG
+                            Debug.WriteIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
+#endif
+
+                            for (int i=0; i<splitStates.Length; i++)
+							{
+                                if(!splitStates[i] && currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying))
+								{
+                                    Split(i, frameCounter);
+								}
+							}
                         }
 
 
@@ -295,7 +158,9 @@ namespace LiveSplit.RedFaction
                         {
                             if (isLoading)
                             {
-                                Debug.WriteLine(String.Format("[NoLoads] Load Start - {0}", frameCounter));
+#if DEBUG
+                                Debug.WriteLine("[NoLoads] Load Start - {frameCounter}");
+#endif
 
                                 loadingStarted = true;
 
@@ -308,7 +173,7 @@ namespace LiveSplit.RedFaction
                                     }
                                 }, null);
 
-                                if (streamGroupId == LevelName.Chapter1Start && isMoviePlaying)
+                                if (levelName == "l1s1.rfl" && isMoviePlaying)
                                 {
                                     //reset game timer
                                     _uiThread.Post(d =>
@@ -322,7 +187,9 @@ namespace LiveSplit.RedFaction
                             }
                             else
                             {
-                                Debug.WriteLine(String.Format("[NoLoads] Load End - {0}", frameCounter));
+#if DEBUG
+                                Debug.WriteLine($"[NoLoads] Load End - {frameCounter}");
+#endif
                                 if (loadingStarted)
                                 {
                                     loadingStarted = false;
@@ -336,7 +203,7 @@ namespace LiveSplit.RedFaction
                                         }
                                     }, null);
 
-                                    if (streamGroupId == LevelName.Chapter1Start)
+                                    if (levelName == "l1s1.rfl")
                                     {
                                         // start game timer
                                         _uiThread.Post(d =>
@@ -351,9 +218,7 @@ namespace LiveSplit.RedFaction
                             }
                         }
 
-
-                        Debug.WriteLineIf(streamGroupId != prevStreamGroupId, String.Format("[NoLoads] streamGroupId changed from {0} to {1} - {2}", prevStreamGroupId, streamGroupId, frameCounter));
-                        prevStreamGroupId = streamGroupId;
+                        prevLevelName = levelName;
                         prevIsLoading = isLoading;
                         prevIsMoviePlaying = isMoviePlaying;
                         
@@ -375,9 +240,11 @@ namespace LiveSplit.RedFaction
             }
         }
 
-        private void Split(SplitArea split, uint frame)
+        private void Split(int split, uint frame)
         {
-            Debug.WriteLine(String.Format("[NoLoads] split {0} - {1}", split, frame));
+#if DEBUG
+            Debug.WriteLine($"[NoLoads] split {split} ({currentSplits[split].Name}) - {frame}");
+#endif
             _uiThread.Post(d =>
             {
                 if (this.OnSplitCompleted != null)

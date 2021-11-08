@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MathStuff.cs" />
     <Compile Include="RedFactionComponent.cs" />
     <Compile Include="RedFactionFactory.cs" />
     <Compile Include="RedFactionSettings.cs">
@@ -64,6 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SplitStruct.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="RedFactionSettings.resx">
