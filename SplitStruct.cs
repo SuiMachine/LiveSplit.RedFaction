@@ -81,6 +81,7 @@ namespace LiveSplit.RedFaction
 
 		internal override bool Check(in string levelName, in string prevLevelName, in bool isMoviePlaying)
 		{
+
 			if (this.Split && this.CurrentLevelName == levelName && this.PreviousLevelName == prevLevelName)
 				return true;
 			else

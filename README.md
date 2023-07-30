@@ -7,7 +7,7 @@ Features
 --------
   * Keeps track of Game Time to get rid of loading times.
   * Auto start/stop the timer.
-  * Splits when you finish each split in Any%. (configurable)
+  * Splits when you finish certain splits for Inbounds runs. (configurable - can be set up to use main splits like the original)
   
 Requirements
 -------
@@ -16,13 +16,15 @@ Requirements
 
 Install
 -------
-Starting with LiveSplit 1.4, you can download and install LiveSplit.RedFaction automatically from within the Splits Editor with just one click. Just type in "Red Faction" and click Activate. This downloads LiveSplit.RedFaction to the Components folder.
+Simply build the solution on your machine, and copy the created DLL to your LiveSplit/Components directory.
+When you open Red Faction in LiveSplit you'll be prompted to update to latest package. Click "No" to use this custom DLL instead.
 
-If the plugin is not working with this process, download the plugin from the [releases page](https://github.com/SuiMachine/LiveSplit.RedFaction/releases) and place the LiveSplit.RedFaction.dll in your Components directory of LiveSplit.
+Normally I'd say take a backup before you do so, but given that LiveSplit recognises that this build does not match the latest, if this doesn't work for you for whatever reason you can simply press "Yes" when it asks you to update to get back to the original SuiMachine version
 
 Configure
 ---------
 Open your Splits Editor and active the autosplitter. If this is not working, leave it deactivated and manually add it in the Layout Editor. You can configure the settings in whichever editor it has been enabled in.
+I've included a layout file which includes the new sub-splits
 
 After configuring everything you'll most likely want to turn on game time as primary timing, so that your splits will run off game time. You can do this by right-clicking LiveSplit and going to Compare Against -> Game Time.
 
@@ -34,7 +36,7 @@ If you wish to show Real Time on your layout, download AlternateTimingMethod fro
 
 Change Log
 ----------
-https://github.com/SuiMachine/LiveSplit.RedFaction/releases
+https://github.com/eckozero/LiveSplit.RedFaction/releases
 
 Adding support for other mods
 ----------
@@ -42,5 +44,5 @@ To add other mods, see [https://github.com/SuiMachine/LiveSplit.RedFaction/wiki]
 
 Credits
 -------
-  * [SuicideMachine](http://twitch.tv/suicidemachine)
-  * Plugin is based off [LiveSplit.Dishonored](https://github.com/fatalis/LiveSplit.Dishonored) by [Fatalis](http://twitch.tv/fatalis_).
+  * [EckoZero](http://twitch.tv/eckozero1987)
+  * Plugin is based off [LiveSplit.RedFaction](https://github.com/SuiMachine/LiveSplit.RedFaction) by [SuicideMachine](http://twitch.tv/suicidemachine)

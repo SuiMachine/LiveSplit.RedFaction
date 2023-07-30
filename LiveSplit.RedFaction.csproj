@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LiveSplit.RedFaction</RootNamespace>
     <AssemblyName>LiveSplit.RedFaction</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -34,8 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiveSplit.Core">
-      <HintPath>C:\LiveSplit\LiveSplit.Core.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\Desktop\LiveSplit_1.8.18\LiveSplit.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -44,8 +43,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="UpdateManager">
-      <HintPath>C:\LiveSplit\UpdateManager.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\Desktop\LiveSplit_1.8.18\UpdateManager.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
