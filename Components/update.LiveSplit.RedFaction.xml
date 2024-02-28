@@ -1,4 +1,10 @@
 <updates>
+	<update version="1.3.0">
+	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
+		<changelog>
+			<change>Added support for NGage SP Campaign Mod (thanks to EckoZero).</change>
+		</changelog>
+	</update>
 	<update version="1.2.0">
 	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
 		<changelog>
