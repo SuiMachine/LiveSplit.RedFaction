@@ -60,14 +60,14 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Central Command - Level 3", "rfrev_kva09.rfl", "rfrev_kva10.rfl"),
 				new SplitLevelChange("Docking Bay Finale", "rfrev_kva10.rfl", "rfrev_kvaend.rfl")
 			}),
-            new Mod("NGage SP Campaign Mod", new List<SplitStructOverall>()
-            {
-                new SplitLevelChange("The Mines (Pt. 1)", "l1s1.rfl", "ng1l2.rfl"),
-                new SplitLevelChange("The Mines (Pt. 2)", "ng1l2.rfl", "ng1l3.rfl"),
-                new SplitLevelChange("The Mines (Pt. 3)", "ng1l3.rfl", "ng2l1.rfl"),
-                new SplitLevelChange("The Barracks (Pt. 1)", "ng2l1.rfl", "ng2l2.rfl"),
-                new SplitLevelChange("The Barracks (Pt. 2)", "ng2l2.rfl", "ng3l1.rfl"),
-                new SplitLevelChange("Docking Bay (Pt. 1)", "ng3l1.rfl", "ng3l2.rfl"), // docking bay 1
+			new Mod("NGage SP Campaign Mod", new List<SplitStructOverall>()
+			{
+				new SplitLevelChange("The Mines (Pt. 1)", "l1s1.rfl", "ng1l2.rfl"),
+				new SplitLevelChange("The Mines (Pt. 2)", "ng1l2.rfl", "ng1l3.rfl"),
+				new SplitLevelChange("The Mines (Pt. 3)", "ng1l3.rfl", "ng2l1.rfl"),
+				new SplitLevelChange("The Barracks (Pt. 1)", "ng2l1.rfl", "ng2l2.rfl"),
+				new SplitLevelChange("The Barracks (Pt. 2)", "ng2l2.rfl", "ng3l1.rfl"),
+				new SplitLevelChange("Docking Bay (Pt. 1)", "ng3l1.rfl", "ng3l2.rfl"), // docking bay 1
 				new SplitLevelChange("Docking Bay (Pt. 2)", "ng3l2.rfl", "ng3l3.rfl"), // docking bay 2
 				new SplitLevelChange("Docking Bay (Pt. 3)", "ng3l3.rfl", "ng4l1.rfl"), // docking bay 3
 				new SplitLevelChange("Crevasse (Pt. 1)", "ng4l1.rfl", "ng4l2.rfl"), // crevasse 1
@@ -86,7 +86,7 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Masako\'s Lair (Pt. 1)", "ng10l1.rfl", "ng10l2.rfl"), // masako 1
 				new SplitLevelChange("Masako\'s Lair (Pt. 2)", "ng10l2.rfl", "glass_house.rfl") // masako 2
 			})
-        };
+		};
 
 		public Mod[] Mods;
 
