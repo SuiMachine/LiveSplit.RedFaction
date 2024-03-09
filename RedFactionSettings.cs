@@ -86,11 +86,11 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Masako\'s Lair (Pt. 1)", "ng10l1.rfl", "ng10l2.rfl"), // masako 1
 				new SplitLevelChange("Masako\'s Lair (Pt. 2)", "ng10l2.rfl", "glass_house.rfl") // masako 2
 			}),
-            new Mod("Barracks Horror!", new List<SplitStructOverall>()
-            {
-                new SplitLevelChange("Barracks Horror", "l1s1.rfl", "horrorend.rfl")
-            })
-        };
+			new Mod("Barracks Horror!", new List<SplitStructOverall>()
+			{
+				new SplitLevelChange("Barracks Horror", "l1s1.rfl", "horrorend.rfl")
+			})
+		};
 
 		public Mod[] Mods;
 
