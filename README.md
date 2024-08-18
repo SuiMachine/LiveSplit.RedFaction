@@ -42,5 +42,5 @@ To add other mods, see [https://github.com/SuiMachine/LiveSplit.RedFaction/wiki]
 
 Credits
 -------
-  * [SuicideMachine](http://twitch.tv/suicidemachine)
+  * [SuicideMachine](http://twitch.tv/suimachine)
   * Plugin is based off [LiveSplit.Dishonored](https://github.com/fatalis/LiveSplit.Dishonored) by [Fatalis](http://twitch.tv/fatalis_).
