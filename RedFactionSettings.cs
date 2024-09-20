@@ -18,7 +18,7 @@ namespace LiveSplit.RedFaction
 		private const int DEFAULT_MODINDEX = 0;
 		private static readonly Mod[] DEFAULT_MODS = new Mod[]
 		{
-			new Mod("Base Game", new List<SplitStructOverall>()
+			new Mod("Base Game", "l1s1.rfl", new List<SplitStructOverall>()
 			{
 				new SplitLevelChange("Chapter 1 (Mines)", "l1s3.rfl", "l2s1.rfl"),
 				new SplitLevelChange("Chapter 2 (Barracks)", "l2s3.rfl", "l3s1.rfl"),
@@ -41,7 +41,7 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Chapter 19 (Finale)", "l20s2.rfl", "l20s3.rfl"),
 				new SplitVideoPlays("A Bomb!", "l20s3.rfl")
 			}),
-			new Mod("Kava", new List<SplitStructOverall>()
+			new Mod("Kava", "l1s1.rfl", new List<SplitStructOverall>()
 			{
 				new SplitLevelChange("Tram Station", "l1s1.rfl", "rfrev_kva00b.rfl"),
 				new SplitLevelChange("Surface of the Red Planet", "rfrev_kva00b.rfl", "rfrev_kva00c.rfl"),
@@ -60,7 +60,7 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Central Command - Level 3", "rfrev_kva09.rfl", "rfrev_kva10.rfl"),
 				new SplitLevelChange("Docking Bay Finale", "rfrev_kva10.rfl", "rfrev_kvaend.rfl")
 			}),
-			new Mod("NGage SP Campaign Mod", new List<SplitStructOverall>()
+			new Mod("NGage SP Campaign Mod", "l1s1.rfl", new List<SplitStructOverall>()
 			{
 				new SplitLevelChange("The Mines (Pt. 1)", "l1s1.rfl", "ng1l2.rfl"),
 				new SplitLevelChange("The Mines (Pt. 2)", "ng1l2.rfl", "ng1l3.rfl"),
@@ -86,11 +86,21 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Masako\'s Lair (Pt. 1)", "ng10l1.rfl", "ng10l2.rfl"), // masako 1
 				new SplitLevelChange("Masako\'s Lair (Pt. 2)", "ng10l2.rfl", "glass_house.rfl") // masako 2
 			}),
-			new Mod("Barracks Horror!", new List<SplitStructOverall>()
+            new Mod("NGage SP Promo Campaign", "NGP1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Among the Mines", "NGP1.rfl", "NGP2.rfl"),
+				new SplitLevelChange("Ultor\'s Barracks", "NGP2.rfl", "NGP3.rfl")
+			}),
+            new Mod("Barracks Horror!", "l1s1.rfl", new List<SplitStructOverall>()
 			{
 				new SplitLevelChange("Barracks Horror", "l1s1.rfl", "horrorend.rfl")
-			})
-		};
+			}),
+            new Mod("Nano-Theft", "l1s1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Outside", "l1s1.rfl", "EDGarage.rfl"),
+                new SplitLevelChange("Garage", "EDGarage.rfl", "NanoEnd.rfl")
+            })
+        };
 
 		public Mod[] Mods;
 

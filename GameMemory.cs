@@ -174,7 +174,7 @@ async Task MemoryReadThread(CancellationToken cancellationToken)
                                 this.OnLoadStarted?.Invoke(this, EventArgs.Empty);
                             }, null);
 
-                            if (levelName == "l1s1.rfl" && isMoviePlaying)
+                            if (levelName == _settings.Mods[_settings.ModIndex].FirstLevel.ToLower() && isMoviePlaying)
                             {
                                 // reset game timer
                                 _uiThread.Post(d =>
@@ -198,7 +198,7 @@ async Task MemoryReadThread(CancellationToken cancellationToken)
                                     this.OnLoadFinished?.Invoke(this, EventArgs.Empty);
                                 }, null);
 
-                                if (levelName == "l1s1.rfl")
+                                if (levelName == _settings.Mods[_settings.ModIndex].FirstLevel.ToLower())
                                 {
                                     // start game timer
                                     _uiThread.Post(d =>
