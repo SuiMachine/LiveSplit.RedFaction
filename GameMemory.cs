@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LiveSplit.ComponentUtil;
+using System.Runtime.InteropServices;
 
 namespace LiveSplit.RedFaction
 {
@@ -36,11 +37,12 @@ namespace LiveSplit.RedFaction
             "rf_120na"
         };
 
-        private enum ExpectedDllSizes
+        private string[] validWindowTitles =
         {
-            PureFaction30d = 29945856,
-            RedFaction1_20 = 29917184
-        }
+            "Red Faction",
+            "Dash Faction",
+            "Pure Faction"
+        };
 
         public List<SplitStructOverall> currentSplits { get; set; }
         public bool[] splitStates { get; set; }
@@ -81,7 +83,7 @@ namespace LiveSplit.RedFaction
 
             _uiThread = SynchronizationContext.Current;
             _cancelSource = new CancellationTokenSource();
-            _thread = Task.Factory.StartNew(MemoryReadThread);
+            _thread = Task.Run(() => MemoryReadThread(_cancelSource.Token));
         }
 
         public void Stop()
@@ -95,152 +97,144 @@ namespace LiveSplit.RedFaction
             _thread.Wait();
         }
 
-        void MemoryReadThread()
+// asynchronous memory read
+async Task MemoryReadThread(CancellationToken cancellationToken)
+    {
+        Debug.WriteLine("[NoLoads] MemoryReadThread");
+
+        while (!cancellationToken.IsCancellationRequested)
         {
-            Debug.WriteLine("[NoLoads] MemoryReadThread");
-
-            while (!_cancelSource.IsCancellationRequested)
+            try
             {
-                try
-                {
-                    Debug.WriteLine("[NoLoads] Waiting for pf.exe...");
+                Debug.WriteLine("[NoLoads] Waiting for RF executable...");
 
-                    Process game;
-                    while ((game = GetGameProcess()) == null)
+                Process game = null;
+
+                // asynchronously wait for the game process
+                while ((game = await GetGameProcess()) == null)
+                {
+                    await Task.Delay(250);
+                    if (cancellationToken.IsCancellationRequested)
                     {
-                        Thread.Sleep(250);
-                        if (_cancelSource.IsCancellationRequested)
+                        return;
+                    }
+                }
+
+                Debug.WriteLine("[NoLoads] Got game process!");
+
+                uint frameCounter = 0;
+                bool prevIsLoading = false;
+                bool prevIsMoviePlaying = false;
+                string prevLevelName = "";
+
+                bool loadingStarted = false;
+
+                // main game loop while the game is running
+                while (!game.HasExited)
+                {
+                    bool isLoading;
+                    bool isMoviePlaying;
+                    string levelName = "";
+                    _levelNamePtr.DerefString(game, 32, out levelName);
+                    levelName = levelName?.ToLower() ?? "";
+
+                    _isLoadingPtr.Deref(game, out isLoading);
+                    _binkMoviePlaying.Deref(game, out isMoviePlaying);
+
+                    // check for level change or bik movie state
+                    if (levelName != prevLevelName && !string.IsNullOrEmpty(levelName) || isMoviePlaying != prevIsLoading)
+                    {
+#if DEBUG
+                    Debug.WriteIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
+#endif
+
+                        for (int i = 0; i < splitStates.Length; i++)
                         {
-                            return;
+                            if (!splitStates[i] && currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying))
+                            {
+                                Split(i, frameCounter);
+                            }
                         }
                     }
 
-                    Debug.WriteLine("[NoLoads] Got games process!");
-
-                    uint frameCounter = 0;
-
-                    bool prevIsLoading = false;
-                    bool prevIsMoviePlaying = false;
-                    string prevLevelName = "";
-
-
-                    bool loadingStarted = false;
-
-                    while (!game.HasExited)
+                    // handle loading states
+                    if (isLoading != prevIsLoading || prevIsMoviePlaying != isMoviePlaying)
                     {
-                        bool isLoading;
-                        bool isMoviePlaying;
-                        string levelName = "";
-                        _levelNamePtr.DerefString(game, 32, out levelName);
-                        levelName = levelName != null ? levelName.ToLower() : "";  //cause it can read null if the game started off fresh and then you'd try to convert it to lowercase and would get exception
-                        _isLoadingPtr.Deref(game, out isLoading);
-                        _binkMoviePlaying.Deref(game, out isMoviePlaying);
-
-                        if (levelName != prevLevelName && levelName != null || isMoviePlaying != prevIsLoading)
+                        if (isLoading)
                         {
 #if DEBUG
-                            Debug.WriteIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
+                        Debug.WriteLine("[NoLoads] Load Start - {frameCounter}");
 #endif
 
-                            for (int i=0; i<splitStates.Length; i++)
-							{
-                                if(!splitStates[i] && currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying))
-								{
-                                    Split(i, frameCounter);
-								}
-							}
-                        }
+                            loadingStarted = true;
 
-
-                        _isLoadingPtr.Deref(game, out isLoading);
-
-                        if (isLoading != prevIsLoading || prevIsMoviePlaying != isMoviePlaying)
-                        {
-                            if (isLoading)
+                            // pause game timer
+                            _uiThread.Post(d =>
                             {
-#if DEBUG
-                                Debug.WriteLine("[NoLoads] Load Start - {frameCounter}");
-#endif
+                                this.OnLoadStarted?.Invoke(this, EventArgs.Empty);
+                            }, null);
 
-                                loadingStarted = true;
-
-                                // pause game timer
+                            if (levelName == "l1s1.rfl" && isMoviePlaying)
+                            {
+                                // reset game timer
                                 _uiThread.Post(d =>
                                 {
-                                    if (this.OnLoadStarted != null)
-                                    {
-                                        this.OnLoadStarted(this, EventArgs.Empty);
-                                    }
+                                    this.OnFirstLevelLoading?.Invoke(this, EventArgs.Empty);
+                                }, null);
+                            }
+                        }
+                        else
+                        {
+#if DEBUG
+                        Debug.WriteLine($"[NoLoads] Load End - {frameCounter}");
+#endif
+                            if (loadingStarted)
+                            {
+                                loadingStarted = false;
+
+                                // unpause game timer
+                                _uiThread.Post(d =>
+                                {
+                                    this.OnLoadFinished?.Invoke(this, EventArgs.Empty);
                                 }, null);
 
-                                if (levelName == "l1s1.rfl" && isMoviePlaying)
+                                if (levelName == "l1s1.rfl")
                                 {
-                                    //reset game timer
+                                    // start game timer
                                     _uiThread.Post(d =>
                                     {
-                                        if (this.OnFirstLevelLoading != null)
-                                        {
-                                            this.OnFirstLevelLoading(this, EventArgs.Empty);
-                                        }
+                                        this.OnPlayerGainedControl?.Invoke(this, EventArgs.Empty);
                                     }, null);
                                 }
                             }
-                            else
-                            {
-#if DEBUG
-                                Debug.WriteLine($"[NoLoads] Load End - {frameCounter}");
-#endif
-                                if (loadingStarted)
-                                {
-                                    loadingStarted = false;
-
-                                    // unpause game timer
-                                    _uiThread.Post(d =>
-                                    {
-                                        if (this.OnLoadFinished != null)
-                                        {
-                                            this.OnLoadFinished(this, EventArgs.Empty);
-                                        }
-                                    }, null);
-
-                                    if (levelName == "l1s1.rfl")
-                                    {
-                                        // start game timer
-                                        _uiThread.Post(d =>
-                                        {
-                                            if (this.OnPlayerGainedControl != null)
-                                            {
-                                                this.OnPlayerGainedControl(this, EventArgs.Empty);
-                                            }
-                                        }, null);
-                                    }
-                                }
-                            }
-                        }
-
-                        prevLevelName = levelName;
-                        prevIsLoading = isLoading;
-                        prevIsMoviePlaying = isMoviePlaying;
-                        
-                        frameCounter++;
-
-                        Thread.Sleep(15);
-
-                        if (_cancelSource.IsCancellationRequested)
-                        {
-                            return;
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.ToString());
-                    Thread.Sleep(1000);
+
+                    prevLevelName = levelName;
+                    prevIsLoading = isLoading;
+                    prevIsMoviePlaying = isMoviePlaying;
+
+                    frameCounter++;
+
+                    // non-blocking delay between each frame read
+                    await Task.Delay(15);
+
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                await Task.Delay(1000); // non-blocking delay in case of error
+            }
         }
+    }
 
-        private void Split(int split, uint frame)
+
+    private void Split(int split, uint frame)
         {
 #if DEBUG
             Debug.WriteLine($"[NoLoads] split {split} ({currentSplits[split].Name}) - {frame}");
@@ -254,34 +248,45 @@ namespace LiveSplit.RedFaction
             }, null);
         }
 
-        Process GetGameProcess()
+        async Task<Process> GetGameProcess()
         {
-            Process game = Process.GetProcesses().FirstOrDefault(p => (validExeNames.Any(x => x == p.ProcessName.ToLower()))
-                && !p.HasExited && !_ignorePIDs.Contains(p.Id));
+            // find valid rf executables by exe name
+            Process game = Process.GetProcesses().FirstOrDefault(p =>
+                (validExeNames.Any(x => x == p.ProcessName.ToLower())) &&
+                !p.HasExited &&
+                !_ignorePIDs.Contains(p.Id)
+            );
+
+            // abort if no valid exe name found
             if (game == null)
             {
                 return null;
             }
 
-            binkw32 = game.ModulesWow64Safe().FirstOrDefault(p => p.ModuleName.ToLower() == "binkw32.dll");
-            if (binkw32 == null)
-                return null;
+            // asynchronous 500ms delay to give time for the window title to populate before we check it
+            await Task.Delay(500);
 
-            var mainModuleSize = game.MainModuleWow64Safe().ModuleMemorySize;
+            // retrieve window title and trim spaces
+            string windowTitle = game.MainWindowTitle?.Trim();
 
-            if (mainModuleSize == (int)ExpectedDllSizes.PureFaction30d || mainModuleSize == (int)ExpectedDllSizes.RedFaction1_20)
-            {
-
-            }
-            else
+            // confirm window title is valid, abort if not
+            if (string.IsNullOrEmpty(windowTitle) ||
+                !validWindowTitles.Any(title => windowTitle.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0))
             {
                 _ignorePIDs.Add(game.Id);
-                _uiThread.Send(d => MessageBox.Show("Unexpected game version. Red Faction 1.20 (including DashFaction) or Pure Faction 3.0d is required", "LiveSplit.RedFaction",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error), null);
+                _uiThread.Send(d => MessageBox.Show($"Unexpected game version.",
+                    "LiveSplit.RedFaction", MessageBoxButtons.OK, MessageBoxIcon.Error), null);
                 return null;
             }
 
-            return game;
+            // connfirm binkw32.dll is loaded, abort if not
+            var binkw32 = game.ModulesWow64Safe().FirstOrDefault(p => p.ModuleName.ToLower() == "binkw32.dll");
+            if (binkw32 == null)
+            {
+                return null;
+            }
+
+            return game; // return valid rf game process
         }
     }
 }
