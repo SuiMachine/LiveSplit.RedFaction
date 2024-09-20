@@ -264,7 +264,7 @@ async Task MemoryReadThread(CancellationToken cancellationToken)
             }
 
             // asynchronous 500ms delay to give time for the window title to populate before we check it
-            await Task.Delay(500);
+            await Task.Delay(1000);
 
             // retrieve window title and trim spaces
             string windowTitle = game.MainWindowTitle?.Trim();
