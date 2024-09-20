@@ -97,144 +97,142 @@ namespace LiveSplit.RedFaction
             _thread.Wait();
         }
 
-// asynchronous memory read
-async Task MemoryReadThread(CancellationToken cancellationToken)
-    {
-        Debug.WriteLine("[NoLoads] MemoryReadThread");
-
-        while (!cancellationToken.IsCancellationRequested)
+        private void MemoryReadThread(CancellationToken cancellationToken)
         {
-            try
+            Debug.WriteLine("[NoLoads] MemoryReadThread");
+
+            while (!cancellationToken.IsCancellationRequested)
             {
-                Debug.WriteLine("[NoLoads] Waiting for RF executable...");
-
-                Process game = null;
-
-                // asynchronously wait for the game process
-                while ((game = await GetGameProcess()) == null)
+                try
                 {
-                    await Task.Delay(250);
-                    if (cancellationToken.IsCancellationRequested)
+                    Debug.WriteLine("[NoLoads] Waiting for RF executable...");
+
+                    Process game = null;
+
+                    // wait for the game process (blocking wait until the process is found or canceled)
+                    while ((game = GetGameProcess()) == null)
                     {
-                        return;
-                    }
-                }
-
-                Debug.WriteLine("[NoLoads] Got game process!");
-
-                uint frameCounter = 0;
-                bool prevIsLoading = false;
-                bool prevIsMoviePlaying = false;
-                string prevLevelName = "";
-
-                bool loadingStarted = false;
-
-                // main game loop while the game is running
-                while (!game.HasExited)
-                {
-                    bool isLoading;
-                    bool isMoviePlaying;
-                    string levelName = "";
-                    _levelNamePtr.DerefString(game, 32, out levelName);
-                    levelName = levelName?.ToLower() ?? "";
-
-                    _isLoadingPtr.Deref(game, out isLoading);
-                    _binkMoviePlaying.Deref(game, out isMoviePlaying);
-
-                    // check for level change or bik movie state
-                    if (levelName != prevLevelName && !string.IsNullOrEmpty(levelName) || isMoviePlaying != prevIsLoading)
-                    {
-#if DEBUG
-                    Debug.WriteIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
-#endif
-
-                        for (int i = 0; i < splitStates.Length; i++)
+                        if (cancellationToken.IsCancellationRequested)
                         {
-                            if (!splitStates[i] && currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying))
-                            {
-                                Split(i, frameCounter);
-                            }
+                            return;
                         }
                     }
 
-                    // handle loading states
-                    if (isLoading != prevIsLoading || prevIsMoviePlaying != isMoviePlaying)
+                    Debug.WriteLine("[NoLoads] Got game process!");
+
+                    uint frameCounter = 0;
+                    bool prevIsLoading = false;
+                    bool prevIsMoviePlaying = false;
+                    string prevLevelName = "";
+
+                    bool loadingStarted = false;
+
+                    // main game loop while the game is running
+                    while (!game.HasExited)
                     {
-                        if (isLoading)
+                        bool isLoading;
+                        bool isMoviePlaying;
+                        string levelName = "";
+                        _levelNamePtr.DerefString(game, 32, out levelName);
+                        levelName = levelName?.ToLower() ?? "";
+
+                        _isLoadingPtr.Deref(game, out isLoading);
+                        _binkMoviePlaying.Deref(game, out isMoviePlaying);
+
+                        // check for level change or bik movie state
+                        if (levelName != prevLevelName && !string.IsNullOrEmpty(levelName) || isMoviePlaying != prevIsLoading)
                         {
 #if DEBUG
-                        Debug.WriteLine("[NoLoads] Load Start - {frameCounter}");
+                            Debug.WriteIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
 #endif
 
-                            loadingStarted = true;
-
-                            // pause game timer
-                            _uiThread.Post(d =>
+                            for (int i = 0; i < splitStates.Length; i++)
                             {
-                                this.OnLoadStarted?.Invoke(this, EventArgs.Empty);
-                            }, null);
-
-                            if (levelName == _settings.Mods[_settings.ModIndex].FirstLevel.ToLower() && isMoviePlaying)
-                            {
-                                // reset game timer
-                                _uiThread.Post(d =>
+                                if (!splitStates[i] && currentSplits[i].Check(in levelName, in prevLevelName, isMoviePlaying))
                                 {
-                                    this.OnFirstLevelLoading?.Invoke(this, EventArgs.Empty);
-                                }, null);
-                            }
-                        }
-                        else
-                        {
-#if DEBUG
-                        Debug.WriteLine($"[NoLoads] Load End - {frameCounter}");
-#endif
-                            if (loadingStarted)
-                            {
-                                loadingStarted = false;
-
-                                // unpause game timer
-                                _uiThread.Post(d =>
-                                {
-                                    this.OnLoadFinished?.Invoke(this, EventArgs.Empty);
-                                }, null);
-
-                                if (levelName == _settings.Mods[_settings.ModIndex].FirstLevel.ToLower())
-                                {
-                                    // start game timer
-                                    _uiThread.Post(d =>
-                                    {
-                                        this.OnPlayerGainedControl?.Invoke(this, EventArgs.Empty);
-                                    }, null);
+                                    Split(i, frameCounter);
                                 }
                             }
                         }
-                    }
 
-                    prevLevelName = levelName;
-                    prevIsLoading = isLoading;
-                    prevIsMoviePlaying = isMoviePlaying;
+                        // handle loading states
+                        if (isLoading != prevIsLoading || prevIsMoviePlaying != isMoviePlaying)
+                        {
+                            if (isLoading)
+                            {
+#if DEBUG
+                                Debug.WriteLine("[NoLoads] Load Start - {frameCounter}");
+#endif
 
-                    frameCounter++;
+                                loadingStarted = true;
 
-                    // non-blocking delay between each frame read
-                    await Task.Delay(15);
+                                // pause game timer
+                                _uiThread.Post(d =>
+                                {
+                                    this.OnLoadStarted?.Invoke(this, EventArgs.Empty);
+                                }, null);
 
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return;
+                                if (levelName == _settings.Mods[_settings.ModIndex].FirstLevel.ToLower() && isMoviePlaying)
+                                {
+                                    // reset game timer
+                                    _uiThread.Post(d =>
+                                    {
+                                        this.OnFirstLevelLoading?.Invoke(this, EventArgs.Empty);
+                                    }, null);
+                                }
+                            }
+                            else
+                            {
+#if DEBUG
+                                Debug.WriteLine($"[NoLoads] Load End - {frameCounter}");
+#endif
+                                if (loadingStarted)
+                                {
+                                    loadingStarted = false;
+
+                                    // unpause game timer
+                                    _uiThread.Post(d =>
+                                    {
+                                        this.OnLoadFinished?.Invoke(this, EventArgs.Empty);
+                                    }, null);
+
+                                    if (levelName == _settings.Mods[_settings.ModIndex].FirstLevel.ToLower())
+                                    {
+                                        // start game timer
+                                        _uiThread.Post(d =>
+                                        {
+                                            this.OnPlayerGainedControl?.Invoke(this, EventArgs.Empty);
+                                        }, null);
+                                    }
+                                }
+                            }
+                        }
+
+                        prevLevelName = levelName;
+                        prevIsLoading = isLoading;
+                        prevIsMoviePlaying = isMoviePlaying;
+
+                        frameCounter++;
+
+                        Thread.Sleep(15); // non-blocking delay between each frame read
+
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-                await Task.Delay(1000); // non-blocking delay in case of error
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    Thread.Sleep(1000); // blocking delay in case of error
+                }
             }
         }
-    }
 
 
-    private void Split(int split, uint frame)
+
+        private void Split(int split, uint frame)
         {
 #if DEBUG
             Debug.WriteLine($"[NoLoads] split {split} ({currentSplits[split].Name}) - {frame}");
@@ -248,7 +246,7 @@ async Task MemoryReadThread(CancellationToken cancellationToken)
             }, null);
         }
 
-        async Task<Process> GetGameProcess()
+        private Process GetGameProcess()
         {
             // find valid rf executables by exe name
             Process game = Process.GetProcesses().FirstOrDefault(p =>
@@ -263,15 +261,28 @@ async Task MemoryReadThread(CancellationToken cancellationToken)
                 return null;
             }
 
-            // asynchronous 500ms delay to give time for the window title to populate before we check it
-            await Task.Delay(1000);
+            string windowTitle = null;
 
-            // retrieve window title and trim spaces
-            string windowTitle = game.MainWindowTitle?.Trim();
+            // keep checking until the window has a title, the process exits, or a 3-second timeout elapses
+            var stopwatch = Stopwatch.StartNew();
+            while (string.IsNullOrEmpty(windowTitle))
+            {
+                if (game.HasExited)
+                {
+                    return null; // process exited before it got a title
+                }
+
+                if (stopwatch.ElapsedMilliseconds > 3000)
+                {
+                    return null; // timeout after 3 seconds
+                }
+
+                Thread.Sleep(50); // wait 50ms before trying again
+                windowTitle = game.MainWindowTitle?.Trim();
+            }
 
             // confirm window title is valid, abort if not
-            if (string.IsNullOrEmpty(windowTitle) ||
-                !validWindowTitles.Any(title => windowTitle.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0))
+            if (!validWindowTitles.Any(title => windowTitle.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0))
             {
                 _ignorePIDs.Add(game.Id);
                 _uiThread.Send(d => MessageBox.Show($"Unexpected game version.",
@@ -279,14 +290,14 @@ async Task MemoryReadThread(CancellationToken cancellationToken)
                 return null;
             }
 
-            // connfirm binkw32.dll is loaded, abort if not
+            // confirm binkw32.dll is loaded, abort if not
             var binkw32 = game.ModulesWow64Safe().FirstOrDefault(p => p.ModuleName.ToLower() == "binkw32.dll");
             if (binkw32 == null)
             {
                 return null;
             }
 
-            return game; // return valid rf game process
+            return game; // return valid RF game process
         }
     }
 }

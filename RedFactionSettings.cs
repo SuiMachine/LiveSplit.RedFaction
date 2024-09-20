@@ -89,12 +89,34 @@ namespace LiveSplit.RedFaction
             new Mod("NGage SP Promo Campaign", "NGP1.rfl", new List<SplitStructOverall>()
             {
                 new SplitLevelChange("Among the Mines", "NGP1.rfl", "NGP2.rfl"),
-				new SplitLevelChange("Ultor\'s Barracks", "NGP2.rfl", "NGP3.rfl")
-			}),
+				new SplitLevelChange("Ultor\'s Barracks", "NGP2.rfl", "NGP3.rfl"),
+				new SplitLevelChange("Heavy Equipment", "NGP3.rfl", "NGP4.rfl"),
+				new SplitLevelChange("Spooky Lair", "NGP4.rfl", "NGP5.rfl"),
+                new SplitLevelChange("Icy Ride", "NGP5.rfl", "NGP6.rfl"),
+                new SplitLevelChange("Power Station", "NGP6.rfl", "NGP7.rfl"),
+                new SplitLevelChange("Elites\' Division", "NGP7.rfl", "NGP8.rfl"),
+                new SplitLevelChange("Sharp Greeting", "NGP8.rfl", "NGP9.rfl"),
+                new SplitLevelChange("Open Area", "NGP9.rfl", "NGP10.rfl"),
+                new SplitLevelChange("Boss", "NGP10.rfl", "glass_house.rfl")
+            }),
             new Mod("Barracks Horror!", "l1s1.rfl", new List<SplitStructOverall>()
 			{
 				new SplitLevelChange("Barracks Horror", "l1s1.rfl", "horrorend.rfl")
 			}),
+            new Mod("Soldier of Ultor", "souL1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Prison", "souL1.rfl", "souL2.rfl"),
+                new SplitLevelChange("Inside", "souL2.rfl", "souL3.rfl"),
+                new SplitLevelChange("Reactor", "souL3.rfl", "souL4.rfl"),
+                new SplitLevelChange("Escape", "souL4.rfl", "souCS1.rfl"),
+                new SplitLevelChange("Tunnel", "souL5.rfl", "souL6.rfl"),
+                new SplitLevelChange("Tunnel Out", "souL6.rfl", "souL7.rfl"),
+                new SplitLevelChange("Pod", "souL7.rfl", "souL8.rfl"),
+                new SplitLevelChange("Lab", "souL8.rfl", "souL9.rfl"),
+                new SplitLevelChange("Corridor and Guns", "souL9.rfl", "souL10.rfl"),
+                new SplitLevelChange("Power", "souL10.rfl", "souL11.rfl"),
+                new SplitLevelChange("Air and Kill", "souL11.rfl", "souCS2.rfl")
+            }),
             new Mod("Nano-Theft", "l1s1.rfl", new List<SplitStructOverall>()
             {
                 new SplitLevelChange("Outside", "l1s1.rfl", "EDGarage.rfl"),
