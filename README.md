@@ -1,7 +1,7 @@
 ﻿LiveSplit.RedFaction
 =====================
 
-LiveSplit.RedFaction is a [LiveSplit](http://livesplit.org/) component for Red Faction (Pure Faction).
+LiveSplit.RedFaction is a [LiveSplit](http://livesplit.org/) component for Red Faction.
 
 Features
 --------
@@ -12,7 +12,10 @@ Features
 Requirements
 -------
 * LiveSplit 1.6+
-* Red Faction 1.20 (can be DashFaction) or Pure Faction 3.0d
+* One of the following Red Faction client versions:
+	* Official version v1.20 or 1.21
+	* Dash Faction (any version)
+	* Pure Faction 3.0d or 3.0e
 
 Install
 -------
