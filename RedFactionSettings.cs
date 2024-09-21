@@ -30,18 +30,32 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Chapter 8 (Medical Labs)", "l8s4.rfl", "l9s1.rfl"),
 				new SplitLevelChange("Chapter 9 (Caves)", "l9s4.rfl", "l10s1.rfl"),
 				new SplitLevelChange("Chapter 10 (The \"Zoo\")", "l10s4.rfl", "l11s1.rfl"),
-				new SplitLevelChange("Chapter 11 (Capek\'s Secret Facility)", "l11s3.rfl", "l12s1.rfl"),
+				new SplitLevelChange("Chapter 11 (Capek\\'s Secret Facility)", "l11s3.rfl", "l12s1.rfl"),
 				new SplitLevelChange("Chapter 12 (Canion)", "l12s1.rfl", "l13s1.rfl"),
 				new SplitLevelChange("Chapter 13 (Satelite Control)", "l13s3.rfl", "l14s1.rfl"),
 				new SplitLevelChange("Chapter 14 (Missile Command Center)", "l14s3.rfl", "l15s1.rfl"),
 				new SplitLevelChange("Chapter 15 (Catch a Shuttle)", "l15s4.rfl", "l17s1.rfl"), //Chapter 16 missing, don't panic
 				new SplitLevelChange("Chapter 16 (Space Station)", "l17s4.rfl", "l18s1.rfl"),
 				new SplitLevelChange("Chapter 17 (Back on Mars)", "l18s3.rfl", "l19s1.rfl"),
-				new SplitLevelChange("Chapter 18 (Merc\'s Base)", "l19s3.rfl", "l20s1.rfl"),
+				new SplitLevelChange("Chapter 18 (Merc\\'s Base)", "l19s3.rfl", "l20s1.rfl"),
 				new SplitLevelChange("Chapter 19 (Finale)", "l20s2.rfl", "l20s3.rfl"),
 				new SplitVideoPlays("A Bomb!", "l20s3.rfl")
 			}),
-			new Mod("Kava", "l1s1.rfl", new List<SplitStructOverall>()
+            new Mod("Soldier of Ultor", "souL1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Prison", "souL1.rfl", "souL2.rfl"),
+                new SplitLevelChange("Inside", "souL2.rfl", "souL3.rfl"),
+                new SplitLevelChange("Reactor", "souL3.rfl", "souL4.rfl"),
+                new SplitLevelChange("Escape", "souL4.rfl", "souL5.rfl"),
+                new SplitLevelChange("Tunnel", "souL5.rfl", "souL6.rfl"),
+                new SplitLevelChange("Tunnel Out", "souL6.rfl", "souL7.rfl"),
+                new SplitLevelChange("Pod", "souL7.rfl", "souL8.rfl"),
+                new SplitLevelChange("Lab", "souL8.rfl", "souL9.rfl"),
+                new SplitLevelChange("Corridor and Guns", "souL9.rfl", "souL10.rfl"),
+                new SplitLevelChange("Power", "souL10.rfl", "souL11.rfl"),
+                new SplitLevelChange("Air and Kill", "souL11.rfl", "souCS2.rfl")
+            }),
+            new Mod("Kava", "l1s1.rfl", new List<SplitStructOverall>()
 			{
 				new SplitLevelChange("Tram Station", "l1s1.rfl", "rfrev_kva00b.rfl"),
 				new SplitLevelChange("Surface of the Red Planet", "rfrev_kva00b.rfl", "rfrev_kva00c.rfl"),
@@ -79,22 +93,22 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Corporate HQ (Pt. 3)", "ng6l3.rfl", "ng7l1.rfl"), // corporate 3
 				new SplitLevelChange("Medical Research (Pt. 1)", "ng7l1.rfl", "ng7l2.rfl"), // med lab 1
 				new SplitLevelChange("Medical Research (Pt. 2)", "ng7l2.rfl", "ng8l1.rfl"), // med lab 2
-				new SplitLevelChange("Capek\'s Lair", "ng8l1.rfl", "ng8l2.rfl"), // capeks lair
+				new SplitLevelChange("Capek\\'s Lair", "ng8l1.rfl", "ng8l2.rfl"), // capeks lair
 				new SplitLevelChange("Inner Sanctum", "ng8l2.rfl", "ng9l1.rfl"), // inner sanctum
 				new SplitLevelChange("Merc Command Centre", "ng9l1.rfl", "ng9l2.rfl"), // merc centre
 				new SplitLevelChange("Missile Battery", "ng9l2.rfl", "ng10l1.rfl"), // missile battery
-				new SplitLevelChange("Masako\'s Lair (Pt. 1)", "ng10l1.rfl", "ng10l2.rfl"), // masako 1
-				new SplitLevelChange("Masako\'s Lair (Pt. 2)", "ng10l2.rfl", "glass_house.rfl") // masako 2
+				new SplitLevelChange("Masako\\'s Lair (Pt. 1)", "ng10l1.rfl", "ng10l2.rfl"), // masako 1
+				new SplitLevelChange("Masako\\'s Lair (Pt. 2)", "ng10l2.rfl", "glass_house.rfl") // masako 2
 			}),
             new Mod("NGage SP Promo Campaign", "NGP1.rfl", new List<SplitStructOverall>()
             {
                 new SplitLevelChange("Among the Mines", "NGP1.rfl", "NGP2.rfl"),
-				new SplitLevelChange("Ultor\'s Barracks", "NGP2.rfl", "NGP3.rfl"),
+				new SplitLevelChange("Ultor\\'s Barracks", "NGP2.rfl", "NGP3.rfl"),
 				new SplitLevelChange("Heavy Equipment", "NGP3.rfl", "NGP4.rfl"),
 				new SplitLevelChange("Spooky Lair", "NGP4.rfl", "NGP5.rfl"),
                 new SplitLevelChange("Icy Ride", "NGP5.rfl", "NGP6.rfl"),
                 new SplitLevelChange("Power Station", "NGP6.rfl", "NGP7.rfl"),
-                new SplitLevelChange("Elites\' Division", "NGP7.rfl", "NGP8.rfl"),
+                new SplitLevelChange("Elites\\' Division", "NGP7.rfl", "NGP8.rfl"),
                 new SplitLevelChange("Sharp Greeting", "NGP8.rfl", "NGP9.rfl"),
                 new SplitLevelChange("Open Area", "NGP9.rfl", "NGP10.rfl"),
                 new SplitLevelChange("Boss", "NGP10.rfl", "glass_house.rfl")
@@ -103,20 +117,6 @@ namespace LiveSplit.RedFaction
 			{
 				new SplitLevelChange("Barracks Horror", "l1s1.rfl", "horrorend.rfl")
 			}),
-            new Mod("Soldier of Ultor", "souL1.rfl", new List<SplitStructOverall>()
-            {
-                new SplitLevelChange("Prison", "souL1.rfl", "souL2.rfl"),
-                new SplitLevelChange("Inside", "souL2.rfl", "souL3.rfl"),
-                new SplitLevelChange("Reactor", "souL3.rfl", "souL4.rfl"),
-                new SplitLevelChange("Escape", "souL4.rfl", "souCS1.rfl"),
-                new SplitLevelChange("Tunnel", "souL5.rfl", "souL6.rfl"),
-                new SplitLevelChange("Tunnel Out", "souL6.rfl", "souL7.rfl"),
-                new SplitLevelChange("Pod", "souL7.rfl", "souL8.rfl"),
-                new SplitLevelChange("Lab", "souL8.rfl", "souL9.rfl"),
-                new SplitLevelChange("Corridor and Guns", "souL9.rfl", "souL10.rfl"),
-                new SplitLevelChange("Power", "souL10.rfl", "souL11.rfl"),
-                new SplitLevelChange("Air and Kill", "souL11.rfl", "souCS2.rfl")
-            }),
             new Mod("Nano-Theft", "l1s1.rfl", new List<SplitStructOverall>()
             {
                 new SplitLevelChange("Outside", "l1s1.rfl", "EDGarage.rfl"),
