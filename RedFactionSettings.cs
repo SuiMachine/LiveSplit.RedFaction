@@ -41,6 +41,7 @@ namespace LiveSplit.RedFaction
 				new SplitLevelChange("Chapter 19 (Finale)", "l20s2.rfl", "l20s3.rfl"),
 				new SplitVideoPlays("A Bomb!", "l20s3.rfl")
 			}),
+			// issue with sou currently, autostart works, splits do not
             new Mod("Soldier of Ultor", "souL1.rfl", new List<SplitStructOverall>()
             {
                 new SplitLevelChange("Prison", "souL1.rfl", "souL2.rfl"),
