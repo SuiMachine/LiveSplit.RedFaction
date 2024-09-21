@@ -122,6 +122,14 @@ namespace LiveSplit.RedFaction
             {
                 new SplitLevelChange("Outside", "l1s1.rfl", "EDGarage.rfl"),
                 new SplitLevelChange("Garage", "EDGarage.rfl", "NanoEnd.rfl")
+            }),
+            new Mod("LEGO Mod Campaign", "l1s1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Sewer", "l1s1.rfl", "le2s1.rfl"),
+                new SplitLevelChange("City", "le2s1.rfl", "le3s1.rfl"),
+                new SplitLevelChange("Factory", "le3s1.rfl", "le4s1.rfl"),
+                new SplitLevelChange("Tunnel", "le4s1.rfl", "le5s1.rfl"),
+                new SplitLevelChange("Final Battle", "le5s1.rfl", "le6s1.rfl")
             })
         };
 
