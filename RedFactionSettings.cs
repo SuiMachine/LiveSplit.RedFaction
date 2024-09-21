@@ -130,6 +130,65 @@ namespace LiveSplit.RedFaction
                 new SplitLevelChange("Factory", "le3s1.rfl", "le4s1.rfl"),
                 new SplitLevelChange("Tunnel", "le4s1.rfl", "le5s1.rfl"),
                 new SplitLevelChange("Final Battle", "le5s1.rfl", "le6s1.rfl")
+            }),
+			new Mod("Red Doom", "RedDoom-00b.rfl", new List<SplitStructOverall>()
+            {
+				//technically starts when cutscene ends in RedDoom-00b.rfl, but no way to hook that currently
+                new SplitLevelChange("Landing", "RedDoom-00b.rfl", "reddoom-01.rfl"), 
+                new SplitLevelChange("Lift Shaft", "reddoom-01.rfl", "reddoom-02.rfl"),
+                new SplitLevelChange("Forcefield", "reddoom-02.rfl", "rd03a.rfl"),
+                new SplitLevelChange("Laboratory", "rd03a.rfl", "rd-cellblock.rfl"),
+                new SplitLevelChange("Facility", "rd-cellblock.rfl", "rd-final.rfl")
+            }),
+            new Mod("AQuest Speedrun Edition", "l1s1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Cliffside 1", "l1s1.rfl", "aqsre1s2.rfl"),
+                new SplitLevelChange("Cliffside 2", "aqsre1s2.rfl", "aqsre1s3.rfl"),
+                new SplitLevelChange("Cliffside 3", "aqsre1s3.rfl", "aqsre1s4.rfl"),
+                new SplitLevelChange("Cliffside 4", "aqsre1s4.rfl", "aqsre1s5.rfl"),
+                new SplitLevelChange("Cliffside 5", "aqsre1s5.rfl", "aqsre1s6.rfl"),
+                new SplitLevelChange("Cliffside 6", "aqsre1s6.rfl", "aqsre1s7.rfl"),
+                new SplitLevelChange("Cliffside 7", "aqsre1s7.rfl", "aqsre1s8.rfl"),
+                new SplitLevelChange("Cliffside 8", "aqsre1s8.rfl", "aqsre1s9.rfl"),
+                new SplitLevelChange("Cliffside 9", "aqsre1s9.rfl", "aqsre1s10.rfl"),
+                new SplitLevelChange("Cliffside 10", "aqsre1s10.rfl", "aqsre2s1.rfl"),
+                new SplitLevelChange("Egyptian 1", "aqsre2s1.rfl", "aqsre2s2.rfl"),
+                new SplitLevelChange("Egyptian 2", "aqsre2s2.rfl", "aqsre2s3.rfl"),
+                new SplitLevelChange("Egyptian 3", "aqsre2s3.rfl", "aqsre2s4.rfl"),
+                new SplitLevelChange("Egyptian 4", "aqsre2s4.rfl", "aqsre2s5.rfl"),
+                new SplitLevelChange("Egyptian 5", "aqsre2s5.rfl", "aqsre2s6.rfl"),
+                new SplitLevelChange("Egyptian 6", "aqsre2s6.rfl", "aqsre2s7.rfl"),
+                new SplitLevelChange("Egyptian 7", "aqsre2s7.rfl", "aqsre2s8.rfl"),
+                new SplitLevelChange("Egyptian 8", "aqsre2s8.rfl", "aqsre2s10.rfl"),
+                new SplitLevelChange("Egyptian 10", "aqsre2s10.rfl", "aqsre3s1.rfl"),
+                new SplitLevelChange("Factory 1", "aqsre3s1.rfl", "aqsre3s2.rfl"),
+                new SplitLevelChange("Factory 2", "aqsre3s2.rfl", "noexist.rfl") // uses endgame event, currently no way to hook
+            }),
+            new Mod("CORNDOG", "l1s1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Revival of Capek", "l1s1.rfl", "crash.rfl"),
+                new SplitLevelChange("Crash", "crash.rfl", "cool.rfl"),
+                new SplitLevelChange("Cool", "cool.rfl", "chimp.rfl"),
+                new SplitLevelChange("Chimp", "chimp.rfl", "blue.rfl"),
+                new SplitLevelChange("Blue", "blue.rfl", "cats.rfl"),
+                new SplitLevelChange("Cats", "cats.rfl", "tram.rfl"),
+                new SplitLevelChange("Tram", "tram.rfl", "fruit.rfl") // ends with a requested load to a map that doesn't exist
+            }),
+            new Mod("Capture the Flag!", "l1s1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Entrance", "l1s1.rfl", "Admin01.rfl"),
+                new SplitLevelChange("Administration Offices", "Admin01.rfl", "Security01.rfl"),
+                new SplitLevelChange("Security", "Security01.rfl", "Security02.rfl"),
+                new SplitLevelChange("Security Exit", "Security02.rfl", "Admin02.rfl"),
+                new SplitLevelChange("Admin Retreat", "Admin02.rfl", "Floor01.rfl"),
+                new SplitLevelChange("Escape", "Floor01.rfl", "CTFEND.rfl")
+            }),
+            new Mod("RF Fighter", "l1s1.rfl", new List<SplitStructOverall>()
+            {
+                new SplitLevelChange("Start", "RFB01b.rfl", "RFB02.rfl"),
+                new SplitLevelChange("Elevator", "RFB02b.rfl", "RFB03.rfl"),
+                new SplitLevelChange("Abandoned Area", "RFB04.rfl", "RFB05.rfl"),
+                new SplitLevelChange("Into the Mines", "RFB05b.rfl", "noexist.rfl") // uses endgame event, currently no way to hook
             })
         };
 
