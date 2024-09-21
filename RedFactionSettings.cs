@@ -44,17 +44,17 @@ namespace LiveSplit.RedFaction
 			// issue with sou currently, autostart works, splits do not
             new Mod("Soldier of Ultor", "souL1.rfl", new List<SplitStructOverall>()
             {
-                new SplitLevelChange("Prison", "souL1.rfl", "souL2.rfl"),
-                new SplitLevelChange("Inside", "souL2.rfl", "souL3.rfl"),
-                new SplitLevelChange("Reactor", "souL3.rfl", "souL4.rfl"),
-                new SplitLevelChange("Escape", "souL4.rfl", "souL5.rfl"),
-                new SplitLevelChange("Tunnel", "souL5.rfl", "souL6.rfl"),
-                new SplitLevelChange("Tunnel Out", "souL6.rfl", "souL7.rfl"),
-                new SplitLevelChange("Pod", "souL7.rfl", "souL8.rfl"),
-                new SplitLevelChange("Lab", "souL8.rfl", "souL9.rfl"),
-                new SplitLevelChange("Corridor and Guns", "souL9.rfl", "souL10.rfl"),
-                new SplitLevelChange("Power", "souL10.rfl", "souL11.rfl"),
-                new SplitLevelChange("Air and Kill", "souL11.rfl", "souCS2.rfl")
+				new SplitLevelChange("Prison", "souL1.rfl", "souL2.rfl"),
+				new SplitLevelChange("Inside", "souL2.rfl", "souL3.rfl"),
+				new SplitLevelChange("Reactor", "souL3.rfl", "souL4.rfl"),
+				new SplitLevelChange("Escape", "souL4.rfl", "souL5.rfl"),
+				new SplitLevelChange("Tunnel", "souL5.rfl", "souL6.rfl"),
+				new SplitLevelChange("Tunnel Out", "souL6.rfl", "souL7.rfl"),
+				new SplitLevelChange("Pod", "souL7.rfl", "souL8.rfl"),
+				new SplitLevelChange("Lab", "souL8.rfl", "souL9.rfl"),
+				new SplitLevelChange("Corridor and Guns", "souL9.rfl", "souL10.rfl"),
+				new SplitLevelChange("Power", "souL10.rfl", "souL11.rfl"),
+				new SplitLevelChange("Air and Kill", "souL11.rfl", "souCS2.rfl")
             }),
             new Mod("Kava", "l1s1.rfl", new List<SplitStructOverall>()
 			{
