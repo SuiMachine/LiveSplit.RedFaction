@@ -64,7 +64,7 @@ namespace LiveSplit.RedFaction
 
 		void State_OnStart(object sender, EventArgs e)
 		{
-			_gameMemory.resetSplitStates();
+			_gameMemory.ResetSplitStates();
 		}
 
 		void gameMemory_OnFirstLevelLoading(object sender, EventArgs e)
@@ -114,7 +114,7 @@ namespace LiveSplit.RedFaction
 		{
 			this._gameMemory.currentSplits = Settings.CurrentSplits;
 			this._gameMemory.splitStates = new bool[this._gameMemory.currentSplits.Count];
-			this._gameMemory.resetSplitStates();
+			this._gameMemory.ResetSplitStates();
 		}
 
 		public override Control GetSettingsControl(LayoutMode mode)
@@ -130,7 +130,7 @@ namespace LiveSplit.RedFaction
 			if (this._gameMemory.currentSplits != prev)
 			{
 				this._gameMemory.splitStates = new bool[this._gameMemory.currentSplits.Count];
-				this._gameMemory.resetSplitStates();
+				this._gameMemory.ResetSplitStates();
 			}
 		}
 

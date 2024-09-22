@@ -16,6 +16,7 @@ namespace LiveSplit.RedFaction
 		private const bool DEFAULT_AUTORESET = false;
 		private const bool DEFAULT_AUTOSTART = true;
 		private const int DEFAULT_MODINDEX = 0;
+
 		private static readonly Mod[] DEFAULT_MODS = new Mod[]
 		{
 			new Mod("Base Game", "l1s1.rfl", new List<SplitStructOverall>()
