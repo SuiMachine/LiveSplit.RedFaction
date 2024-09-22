@@ -1,4 +1,11 @@
 <updates>
+	<update version="1.5.0">
+	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
+		<changelog>
+			<change>Reworked internals methods related to detecting the game to allow for wider arange of mods to be supported (by GooberRF)</change>
+			<change>Added support for Soldier of Ultor, NGage SP Promo Campaign, Nano-Theft, LEGO Mod Campaign, Red Doom, AQuest Speedrun Edition, Capture the Flag! and RF Fighter (by GooberRF)</change>
+		</changelog>
+	</update>
 	<update version="1.4.0">
 	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
 		<changelog>
