@@ -35,7 +35,7 @@ namespace LiveSplit.RedFaction
 			return new Mod(this.ModName, this.FirstLevel, newSplits);
 		}
 
-		public override string ToString() => ModName;
+		public override string ToString() => $"Mod: {ModName}";
 	}
 
 	[Serializable]
@@ -89,6 +89,8 @@ namespace LiveSplit.RedFaction
 			else
 				return false;
 		}
+
+		public override string ToString() => $"{nameof(SplitLevelChange)}: {PreviousLevelName} -> {CurrentLevelName}";
 	}
 
 	[Serializable]
@@ -122,5 +124,8 @@ namespace LiveSplit.RedFaction
 			else
 				return false;
 		}
+
+		public override string ToString() => $"{nameof(SplitVideoPlays)}: {CurrentLevelName}";
+
 	}
 }
