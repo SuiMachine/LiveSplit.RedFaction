@@ -39,7 +39,8 @@ namespace LiveSplit.RedFaction
 		{
 			"Red Faction",
 			"Dash Faction",
-			"Pure Faction"
+			"Pure Faction",
+			"Alpine Faction"
 		};
 
 		public List<SplitStructOverall> currentSplits { get; set; }
@@ -278,7 +279,7 @@ namespace LiveSplit.RedFaction
 			if (!validWindowTitles.Any(title => windowTitle.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0))
 			{
 				_ignorePIDs.Add(game.Id);
-				_uiThread.Send(d => MessageBox.Show($"Unexpected game version.",
+				_uiThread.Send(d => MessageBox.Show($"Unexpected game window title.",
 					"LiveSplit.RedFaction", MessageBoxButtons.OK, MessageBoxIcon.Error), null);
 				return null;
 			}
