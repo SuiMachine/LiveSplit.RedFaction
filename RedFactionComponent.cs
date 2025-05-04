@@ -3,6 +3,7 @@ using LiveSplit.UI;
 using LiveSplit.UI.Components;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -69,8 +70,14 @@ namespace LiveSplit.RedFaction
 
 		void gameMemory_OnFirstLevelLoading(object sender, EventArgs e)
 		{
-			if (this.Settings.AutoReset)
+			if (Settings.AllowRepeatedRuns && _state.CurrentPhase == TimerPhase.Running && _gameMemory.splitStates.All(x => x == true))
 			{
+				Debug.WriteLine("Soft reset");
+				_gameMemory.ResetSplitStates();
+			}
+			else if (this.Settings.AutoReset)
+			{
+				Debug.WriteLine("Full reset");
 				_timer.Reset();
 			}
 		}
@@ -101,13 +108,6 @@ namespace LiveSplit.RedFaction
 				Debug.WriteLine(string.Format("[NoLoads] {0} Split - {1}", split, frame));
 				_timer.Split();
 				_gameMemory.splitStates[split] = true;
-				if (split == _gameMemory.splitStates.Length - 1)
-				{
-					if (Settings.AllowRepeatedRuns)
-					{
-						_gameMemory.ResetSplitStates();
-					}
-				}
 			}
 		}
 
