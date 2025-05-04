@@ -72,12 +72,12 @@ namespace LiveSplit.RedFaction
 		{
 			if (Settings.AllowRepeatedRuns && _state.CurrentPhase == TimerPhase.Running && _gameMemory.splitStates.All(x => x == true))
 			{
-				Debug.WriteLine("Soft reset");
+				Utils.WriteDebug("Soft reset");
 				_gameMemory.ResetSplitStates();
 			}
 			else if (this.Settings.AutoReset)
 			{
-				Debug.WriteLine("Full reset");
+				Utils.WriteDebug("Full reset");
 				_timer.Reset();
 			}
 		}
@@ -102,10 +102,10 @@ namespace LiveSplit.RedFaction
 
 		void gameMemory_OnSplitCompleted(object sender, int split, uint frame)
 		{
-			Debug.WriteLine(string.Format("[NoLoads] Trying to split {0}, State: {1} - {2}", split, _gameMemory.splitStates[(int)split], frame));
+			Utils.WriteDebug($"[NoLoads] Trying to split {split}, State: {_gameMemory.splitStates[(int)split]} - {frame}");
 			if (_state.CurrentPhase == TimerPhase.Running && !_gameMemory.splitStates[split])
 			{
-				Debug.WriteLine(string.Format("[NoLoads] {0} Split - {1}", split, frame));
+				Utils.WriteDebug($"[NoLoads] {split} Split - {frame}");
 				_timer.Split();
 				_gameMemory.splitStates[split] = true;
 			}

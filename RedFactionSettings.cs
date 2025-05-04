@@ -333,7 +333,7 @@ namespace LiveSplit.RedFaction
 			{
 				if (int.TryParse(settings[setting].InnerText, out int val))
 				{
-					val = MathStuff.Clamp(val, min, max);
+					val = Utils.Clamp(val, min, max);
 					return val;
 				}
 				else

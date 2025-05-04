@@ -98,13 +98,13 @@ namespace LiveSplit.RedFaction
 
 		private void MemoryReadThread(CancellationToken cancellationToken)
 		{
-			Debug.WriteLine("[NoLoads] MemoryReadThread");
+			Utils.WriteDebug("[NoLoads] MemoryReadThread");
 
 			while (!cancellationToken.IsCancellationRequested)
 			{
 				try
 				{
-					Debug.WriteLine("[NoLoads] Waiting for RF executable...");
+					Utils.WriteDebug("[NoLoads] Waiting for RF executable...");
 
 					Process game = null;
 
@@ -117,7 +117,7 @@ namespace LiveSplit.RedFaction
 						}
 					}
 
-					Debug.WriteLine("[NoLoads] Got game process!");
+					Utils.WriteDebug("[NoLoads] Got game process!");
 
 					uint frameCounter = 0;
 					bool prevIsLoading = false;
@@ -138,9 +138,7 @@ namespace LiveSplit.RedFaction
 						// check for level change or bik movie state
 						if (levelName != prevLevelName && !string.IsNullOrEmpty(levelName) || isMoviePlaying != prevIsMoviePlaying)
 						{
-#if DEBUG
-							Debug.WriteIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
-#endif
+							Utils.WriteDebugIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
 
 							for (int i = 0; i < splitStates.Length; i++)
 							{
@@ -156,9 +154,7 @@ namespace LiveSplit.RedFaction
 						{
 							if (isLoading)
 							{
-#if DEBUG
-								Debug.WriteLine("[NoLoads] Load Start - {frameCounter}");
-#endif
+								Utils.WriteDebug("[NoLoads] Load Start - {frameCounter}");
 
 								loadingStarted = true;
 
@@ -179,9 +175,7 @@ namespace LiveSplit.RedFaction
 							}
 							else
 							{
-#if DEBUG
-								Debug.WriteLine($"[NoLoads] Load End - {frameCounter}");
-#endif
+								Utils.WriteDebug($"[NoLoads] Load End - {frameCounter}");
 								if (loadingStarted)
 								{
 									loadingStarted = false;
@@ -220,7 +214,7 @@ namespace LiveSplit.RedFaction
 				}
 				catch (Exception ex)
 				{
-					Debug.WriteLine(ex.ToString());
+					Utils.WriteDebug(ex.ToString());
 					Thread.Sleep(1000); // blocking delay in case of error
 				}
 			}
@@ -228,9 +222,7 @@ namespace LiveSplit.RedFaction
 
 		private void Split(int split, uint frame)
 		{
-#if DEBUG
-			Debug.WriteLine($"[NoLoads] split {split} ({currentSplits[split].Name}) - {frame}");
-#endif
+			Utils.WriteDebug($"[NoLoads] split {split} ({currentSplits[split].Name}) - {frame}");
 			m_UiThread.Post(d =>
 			{
 				if (this.OnSplitCompleted != null)
