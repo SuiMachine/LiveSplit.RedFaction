@@ -136,7 +136,7 @@ namespace LiveSplit.RedFaction
 						m_BinkMoviePlaying.Deref(game, out bool isMoviePlaying);
 
 						// check for level change or bik movie state
-						if (levelName != prevLevelName && !string.IsNullOrEmpty(levelName) || isMoviePlaying != prevIsLoading)
+						if (levelName != prevLevelName && !string.IsNullOrEmpty(levelName) || isMoviePlaying != prevIsMoviePlaying)
 						{
 #if DEBUG
 							Debug.WriteIf(levelName != prevLevelName, $"[NoLoads] Level change {prevLevelName} -> {levelName} (frame #{frameCounter})");
