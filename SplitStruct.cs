@@ -7,17 +7,20 @@ namespace LiveSplit.RedFaction
 	public class Mod : ICloneable
 	{
 		[XmlAttribute] public string ModName;
-		[XmlArrayItem] public List<SplitStructOverall> Splits;
+        [XmlAttribute] public string FirstLevel;
+        [XmlArrayItem] public List<SplitStructOverall> Splits;
 
 		public Mod()
 		{
 			ModName = "";
+			FirstLevel = "";
 			Splits = null;
 		}
 
-		public Mod(string ModName, List<SplitStructOverall> Splits)
+		public Mod(string ModName, string FirstLevel, List<SplitStructOverall> Splits)
 		{
 			this.ModName = ModName;
+			this.FirstLevel = FirstLevel;
 			this.Splits = Splits;
 		}
 
@@ -29,10 +32,10 @@ namespace LiveSplit.RedFaction
 				newSplits.Add(this.Splits[i].Clone());
 			}
 			
-			return new Mod(this.ModName, newSplits);
+			return new Mod(this.ModName, this.FirstLevel, newSplits);
 		}
 
-		public override string ToString() => ModName;
+		public override string ToString() => $"Mod: {ModName}";
 	}
 
 	[Serializable]
@@ -86,6 +89,8 @@ namespace LiveSplit.RedFaction
 			else
 				return false;
 		}
+
+		public override string ToString() => $"{nameof(SplitLevelChange)}: {PreviousLevelName} -> {CurrentLevelName}";
 	}
 
 	[Serializable]
@@ -119,5 +124,8 @@ namespace LiveSplit.RedFaction
 			else
 				return false;
 		}
+
+		public override string ToString() => $"{nameof(SplitVideoPlays)}: {CurrentLevelName}";
+
 	}
 }
