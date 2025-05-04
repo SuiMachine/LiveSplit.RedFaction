@@ -18,15 +18,15 @@ namespace LiveSplit.RedFaction
 		public delegate void SplitCompletedEventHandler(object sender, int split, uint frame);
 		public event SplitCompletedEventHandler OnSplitCompleted;
 
-		private Task _thread;
-		private CancellationTokenSource _cancelSource;
-		private SynchronizationContext _uiThread;
-		private List<int> _ignorePIDs;
-		private RedFactionSettings _settings;
+		private Task m_Thread;
+		private CancellationTokenSource m_CancelSource;
+		private SynchronizationContext m_UiThread;
+		private List<int> m_IgnorePIDs;
+		private RedFactionSettings m_Settings;
 
-		private DeepPointer _isLoadingPtr;
-		private DeepPointer _levelNamePtr;
-		private DeepPointer _binkMoviePlaying;
+		private DeepPointer m_IsLoadingPtr;
+		private DeepPointer m_LevelNamePtr;
+		private DeepPointer m_BinkMoviePlaying;
 
 		private readonly string[] validExeNames =
 		{
@@ -56,22 +56,22 @@ namespace LiveSplit.RedFaction
 
 		public GameMemory(RedFactionSettings componentSettings)
 		{
-			_settings = componentSettings;
-			currentSplits = componentSettings.Mods[componentSettings.ModIndex].Splits;
+			m_Settings = componentSettings;
+			currentSplits = componentSettings.ModStates[componentSettings.ModIndex].Splits;
 			splitStates = new bool[currentSplits.Count];
 
-			_isLoadingPtr = new DeepPointer(0x13756AC); // == 1 if a loadscreen is happening
-			_levelNamePtr = new DeepPointer(0x0246144, 0x0);
-			_binkMoviePlaying = new DeepPointer("binkw32.dll", 0x41BD8);    //binkw32.dll+41BD8
+			m_IsLoadingPtr = new DeepPointer(0x13756AC); // == 1 if a loadscreen is happening
+			m_LevelNamePtr = new DeepPointer(0x0246144, 0x0);
+			m_BinkMoviePlaying = new DeepPointer("binkw32.dll", 0x41BD8);    //binkw32.dll+41BD8
 
 			ResetSplitStates();
 
-			_ignorePIDs = new List<int>();
+			m_IgnorePIDs = new List<int>();
 		}
 
 		public void StartMonitoring()
 		{
-			if (_thread != null && _thread.Status == TaskStatus.Running)
+			if (m_Thread != null && m_Thread.Status == TaskStatus.Running)
 			{
 				throw new InvalidOperationException();
 			}
@@ -80,20 +80,20 @@ namespace LiveSplit.RedFaction
 				throw new InvalidOperationException("SynchronizationContext.Current is not a UI thread.");
 			}
 
-			_uiThread = SynchronizationContext.Current;
-			_cancelSource = new CancellationTokenSource();
-			_thread = Task.Run(() => MemoryReadThread(_cancelSource.Token));
+			m_UiThread = SynchronizationContext.Current;
+			m_CancelSource = new CancellationTokenSource();
+			m_Thread = Task.Run(() => MemoryReadThread(m_CancelSource.Token));
 		}
 
 		public void Stop()
 		{
-			if (_cancelSource == null || _thread == null || _thread.Status != TaskStatus.Running)
+			if (m_CancelSource == null || m_Thread == null || m_Thread.Status != TaskStatus.Running)
 			{
 				return;
 			}
 
-			_cancelSource.Cancel();
-			_thread.Wait();
+			m_CancelSource.Cancel();
+			m_Thread.Wait();
 		}
 
 		private void MemoryReadThread(CancellationToken cancellationToken)
@@ -129,11 +129,11 @@ namespace LiveSplit.RedFaction
 					// main game loop while the game is running
 					while (!game.HasExited)
 					{
-						_levelNamePtr.DerefString(game, 32, out string levelName);
+						m_LevelNamePtr.DerefString(game, 32, out string levelName);
 						levelName = levelName?.ToLower() ?? "";
 
-						_isLoadingPtr.Deref(game, out bool isLoading);
-						_binkMoviePlaying.Deref(game, out bool isMoviePlaying);
+						m_IsLoadingPtr.Deref(game, out bool isLoading);
+						m_BinkMoviePlaying.Deref(game, out bool isMoviePlaying);
 
 						// check for level change or bik movie state
 						if (levelName != prevLevelName && !string.IsNullOrEmpty(levelName) || isMoviePlaying != prevIsLoading)
@@ -163,15 +163,15 @@ namespace LiveSplit.RedFaction
 								loadingStarted = true;
 
 								// pause game timer
-								_uiThread.Post(d =>
+								m_UiThread.Post(d =>
 								{
 									this.OnLoadStarted?.Invoke(this, EventArgs.Empty);
 								}, null);
 
-								if (levelName == _settings.Mods[_settings.ModIndex].FirstLevel.ToLower() && isMoviePlaying)
+								if (levelName == m_Settings.ModStates[m_Settings.ModIndex].FirstLevel.ToLower() && isMoviePlaying)
 								{
 									// reset game timer
-									_uiThread.Post(d =>
+									m_UiThread.Post(d =>
 									{
 										this.OnFirstLevelLoading?.Invoke(this, EventArgs.Empty);
 									}, null);
@@ -187,15 +187,15 @@ namespace LiveSplit.RedFaction
 									loadingStarted = false;
 
 									// unpause game timer
-									_uiThread.Post(d =>
+									m_UiThread.Post(d =>
 									{
 										this.OnLoadFinished?.Invoke(this, EventArgs.Empty);
 									}, null);
 
-									if (levelName == _settings.Mods[_settings.ModIndex].FirstLevel.ToLower())
+									if (levelName == m_Settings.ModStates[m_Settings.ModIndex].FirstLevel.ToLower())
 									{
 										// start game timer
-										_uiThread.Post(d =>
+										m_UiThread.Post(d =>
 										{
 											this.OnPlayerGainedControl?.Invoke(this, EventArgs.Empty);
 										}, null);
@@ -231,7 +231,7 @@ namespace LiveSplit.RedFaction
 #if DEBUG
 			Debug.WriteLine($"[NoLoads] split {split} ({currentSplits[split].Name}) - {frame}");
 #endif
-			_uiThread.Post(d =>
+			m_UiThread.Post(d =>
 			{
 				if (this.OnSplitCompleted != null)
 				{
@@ -246,7 +246,7 @@ namespace LiveSplit.RedFaction
 			Process game = Process.GetProcesses().FirstOrDefault(p =>
 				(validExeNames.Any(x => x == p.ProcessName.ToLower())) &&
 				!p.HasExited &&
-				!_ignorePIDs.Contains(p.Id)
+				!m_IgnorePIDs.Contains(p.Id)
 			);
 
 			// abort if no valid exe name found
@@ -278,8 +278,8 @@ namespace LiveSplit.RedFaction
 			// confirm window title is valid, abort if not
 			if (!validWindowTitles.Any(title => windowTitle.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0))
 			{
-				_ignorePIDs.Add(game.Id);
-				_uiThread.Send(d => MessageBox.Show($"Unexpected game window title.",
+				m_IgnorePIDs.Add(game.Id);
+				m_UiThread.Send(d => MessageBox.Show($"Unexpected game window title.",
 					"LiveSplit.RedFaction", MessageBoxButtons.OK, MessageBoxIcon.Error), null);
 				return null;
 			}

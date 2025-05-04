@@ -35,6 +35,9 @@
 			this.chkAutoReset = new System.Windows.Forms.CheckBox();
 			this.chkAutoStart = new System.Windows.Forms.CheckBox();
 			this.tlpMain = new System.Windows.Forms.TableLayoutPanel();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.chkAllowRepeatedRuns = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -43,6 +46,8 @@
 			this.gbStartSplits.SuspendLayout();
 			this.tlpStartSplits.SuspendLayout();
 			this.tlpMain.SuspendLayout();
+			this.groupBox2.SuspendLayout();
+			this.tableLayoutPanel3.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -54,7 +59,7 @@
 			this.gbEndSplits.Dock = System.Windows.Forms.DockStyle.Top;
 			this.gbEndSplits.Location = new System.Drawing.Point(3, 63);
 			this.gbEndSplits.Name = "gbEndSplits";
-			this.gbEndSplits.Size = new System.Drawing.Size(450, 433);
+			this.gbEndSplits.Size = new System.Drawing.Size(450, 385);
 			this.gbEndSplits.TabIndex = 7;
 			this.gbEndSplits.TabStop = false;
 			this.gbEndSplits.Text = "Auto-splits";
@@ -65,7 +70,7 @@
 			this.CBList_Splits.FormattingEnabled = true;
 			this.CBList_Splits.Location = new System.Drawing.Point(3, 16);
 			this.CBList_Splits.Name = "CBList_Splits";
-			this.CBList_Splits.Size = new System.Drawing.Size(444, 414);
+			this.CBList_Splits.Size = new System.Drawing.Size(444, 366);
 			this.CBList_Splits.TabIndex = 0;
 			this.CBList_Splits.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.CBList_Splits_ItemCheck);
 			// 
@@ -127,6 +132,7 @@
 			// 
 			this.tlpMain.ColumnCount = 1;
 			this.tlpMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tlpMain.Controls.Add(this.groupBox2, 0, 2);
 			this.tlpMain.Controls.Add(this.gbEndSplits, 0, 1);
 			this.tlpMain.Controls.Add(this.tableLayoutPanel1, 0, 0);
 			this.tlpMain.Location = new System.Drawing.Point(0, 0);
@@ -134,8 +140,51 @@
 			this.tlpMain.RowCount = 2;
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
 			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tlpMain.Size = new System.Drawing.Size(456, 499);
+			this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 57F));
+			this.tlpMain.Size = new System.Drawing.Size(456, 508);
 			this.tlpMain.TabIndex = 0;
+			// 
+			// groupBox2
+			// 
+			this.groupBox2.AutoSize = true;
+			this.groupBox2.Controls.Add(this.tableLayoutPanel3);
+			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.groupBox2.Location = new System.Drawing.Point(3, 454);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(450, 51);
+			this.groupBox2.TabIndex = 9;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "Other";
+			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.AutoSize = true;
+			this.tableLayoutPanel3.BackColor = System.Drawing.Color.Transparent;
+			this.tableLayoutPanel3.ColumnCount = 2;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel3.Controls.Add(this.chkAllowRepeatedRuns, 0, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(444, 32);
+			this.tableLayoutPanel3.TabIndex = 4;
+			// 
+			// chkAllowRepeatedRuns
+			// 
+			this.chkAllowRepeatedRuns.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.chkAllowRepeatedRuns.AutoSize = true;
+			this.chkAllowRepeatedRuns.Checked = true;
+			this.chkAllowRepeatedRuns.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkAllowRepeatedRuns.Location = new System.Drawing.Point(3, 7);
+			this.chkAllowRepeatedRuns.Name = "chkAllowRepeatedRuns";
+			this.chkAllowRepeatedRuns.Size = new System.Drawing.Size(119, 17);
+			this.chkAllowRepeatedRuns.TabIndex = 6;
+			this.chkAllowRepeatedRuns.Text = "Allow repeated runs";
+			this.chkAllowRepeatedRuns.UseVisualStyleBackColor = true;
 			// 
 			// tableLayoutPanel1
 			// 
@@ -198,13 +247,18 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tlpMain);
 			this.Name = "RedFactionSettings";
-			this.Size = new System.Drawing.Size(456, 499);
+			this.Size = new System.Drawing.Size(456, 508);
 			this.gbEndSplits.ResumeLayout(false);
 			this.gbStartSplits.ResumeLayout(false);
 			this.gbStartSplits.PerformLayout();
 			this.tlpStartSplits.ResumeLayout(false);
 			this.tlpStartSplits.PerformLayout();
 			this.tlpMain.ResumeLayout(false);
+			this.tlpMain.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
@@ -227,5 +281,8 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.ComboBox Cbox_Mod;
 		private System.Windows.Forms.CheckedListBox CBList_Splits;
+		private System.Windows.Forms.GroupBox groupBox2;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private System.Windows.Forms.CheckBox chkAllowRepeatedRuns;
 	}
 }

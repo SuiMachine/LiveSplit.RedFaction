@@ -101,6 +101,13 @@ namespace LiveSplit.RedFaction
 				Debug.WriteLine(string.Format("[NoLoads] {0} Split - {1}", split, frame));
 				_timer.Split();
 				_gameMemory.splitStates[split] = true;
+				if (split == _gameMemory.splitStates.Length - 1)
+				{
+					if (Settings.AllowRepeatedRuns)
+					{
+						_gameMemory.ResetSplitStates();
+					}
+				}
 			}
 		}
 
