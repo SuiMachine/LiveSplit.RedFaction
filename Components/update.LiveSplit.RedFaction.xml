@@ -1,4 +1,11 @@
 <updates>
+	<update version="1.6.0">
+	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
+		<changelog>
+			<change>Fixed a bug that would cause autosplitter to split continously on a cinematic (was supposed to split only once!).</change>
+			<change>Added an option for repeated runs, which will restart autosplitter's internal flags if the run of a mod/game was finished and a new one was started instead of doing a full run restart - this is designed to allow for challange runs and is disabled by default.</change>
+		</changelog>
+	</update>
 	<update version="1.5.0">
 	<files><file path="Components/LiveSplit.RedFaction.dll" status="changed"/></files>
 		<changelog>

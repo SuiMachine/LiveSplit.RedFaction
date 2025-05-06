@@ -14,9 +14,13 @@ namespace LiveSplit.RedFaction
 		public bool AutoReset { get; set; }
 		public bool AutoStart { get; set; }
 		public int ModIndex { get; set; }
+		public bool AllowRepeatedRuns { get; set; }
+
 
 		private const bool DEFAULT_AUTORESET = false;
 		private const bool DEFAULT_AUTOSTART = true;
+		private const bool DEFAULT_ALLOWREPEATEDRUNS = false;
+
 		private const int DEFAULT_MODINDEX = 0;
 
 		private static readonly Mod[] DEFAULT_MODS = new Mod[]
@@ -195,35 +199,38 @@ namespace LiveSplit.RedFaction
             })
 		};
 
-		public Mod[] Mods;
+		public Mod[] ModStates;
 
-		public List<SplitStructOverall> CurrentSplits => Mods[ModIndex].Splits;
+		public List<SplitStructOverall> CurrentSplits => ModStates[ModIndex].Splits;
 
 		public RedFactionSettings()
 		{
 			InitializeComponent();
 
-			this.chkAutoReset.DataBindings.Add("Checked", this, "AutoReset", false, DataSourceUpdateMode.OnPropertyChanged);
-			this.chkAutoStart.DataBindings.Add("Checked", this, "AutoStart", false, DataSourceUpdateMode.OnPropertyChanged);
+			this.chkAutoReset.DataBindings.Add("Checked", this, nameof(AutoReset), false, DataSourceUpdateMode.OnPropertyChanged);
+			this.chkAutoStart.DataBindings.Add("Checked", this, nameof(AutoStart), false, DataSourceUpdateMode.OnPropertyChanged);
+			this.chkAllowRepeatedRuns.DataBindings.Add("Checked", this, nameof(AllowRepeatedRuns), false, DataSourceUpdateMode.OnPropertyChanged);
+
 			this.Cbox_Mod.Items.Clear();
 			foreach (var mod in DEFAULT_MODS)
 			{
 				this.Cbox_Mod.Items.Add(mod);
 			}
 
-			this.Cbox_Mod.DataBindings.Add("SelectedIndex", this, "ModIndex", false, DataSourceUpdateMode.OnPropertyChanged);
+			this.Cbox_Mod.DataBindings.Add("SelectedIndex", this, nameof(ModIndex), false, DataSourceUpdateMode.OnPropertyChanged);
 
 			// defaults
 			this.AutoReset = DEFAULT_AUTORESET;
 			this.AutoStart = DEFAULT_AUTOSTART;
 			this.ModIndex = DEFAULT_MODINDEX;
+			this.AllowRepeatedRuns = DEFAULT_ALLOWREPEATEDRUNS;
 
 			ValidateLevelNames();
 
-			this.Mods = new Mod[DEFAULT_MODS.Length];
-			for (int i = 0; i < Mods.Length; i++)
+			this.ModStates = new Mod[DEFAULT_MODS.Length];
+			for (int i = 0; i < ModStates.Length; i++)
 			{
-				Mods[i] = (Mod)DEFAULT_MODS[i].Clone();
+				ModStates[i] = (Mod)DEFAULT_MODS[i].Clone();
 			}
 		}
 
@@ -250,20 +257,22 @@ namespace LiveSplit.RedFaction
 
 			settingsNode.AppendChild(ToElement(doc, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
 
-			settingsNode.AppendChild(ToElement(doc, "AutoReset", this.AutoReset));
-			settingsNode.AppendChild(ToElement(doc, "AutoStart", this.AutoStart));
-			settingsNode.AppendChild(ToElement(doc, "ModIndex", this.ModIndex));
-			settingsNode.AppendChild(ToElement(doc, "ModStates", this.Mods));
+			settingsNode.AppendChild(ToElement(doc, nameof(AutoReset), this.AutoReset));
+			settingsNode.AppendChild(ToElement(doc, nameof(AutoStart), this.AutoStart));
+			settingsNode.AppendChild(ToElement(doc, nameof(ModIndex), this.ModIndex));
+			settingsNode.AppendChild(ToElement(doc, nameof(ModStates), this.ModStates));
+			settingsNode.AppendChild(ToElement(doc, nameof(AllowRepeatedRuns), this.AllowRepeatedRuns));
 
 			return settingsNode;
 		}
 
 		public void SetSettings(XmlNode settings)
 		{
-			this.AutoReset = ParseBool(settings, "AutoReset", DEFAULT_AUTORESET);
-			this.AutoStart = ParseBool(settings, "AutoStart", DEFAULT_AUTOSTART);
-			this.ModIndex = ParseInt(settings, "ModIndex", DEFAULT_MODINDEX, 0, DEFAULT_MODS.Length - 1);
-			Mods = ParseXML(settings, "ModStates", DEFAULT_MODS);
+			this.AutoReset = ParseBool(settings, nameof(AutoReset), DEFAULT_AUTORESET);
+			this.AutoStart = ParseBool(settings, nameof(AutoStart), DEFAULT_AUTOSTART);
+			this.ModIndex = ParseInt(settings, nameof(ModIndex), DEFAULT_MODINDEX, 0, DEFAULT_MODS.Length - 1);
+			this.AllowRepeatedRuns = ParseBool(settings, nameof(AllowRepeatedRuns), DEFAULT_ALLOWREPEATEDRUNS);
+			ModStates = ParseXML(settings, nameof(ModStates), DEFAULT_MODS);
 		}
 
 		private Mod[] ParseXML(XmlNode settings, string setting, Mod[] default_)
@@ -313,20 +322,18 @@ namespace LiveSplit.RedFaction
 
 		static bool ParseBool(XmlNode settings, string setting, bool default_ = false)
 		{
-			bool val;
 			return settings[setting] != null ?
-				(Boolean.TryParse(settings[setting].InnerText, out val) ? val : default_)
+				(Boolean.TryParse(settings[setting].InnerText, out bool val) ? val : default_)
 				: default_;
 		}
 
 		static int ParseInt(XmlNode settings, string setting, int default_ = 0, int min = int.MinValue, int max = int.MaxValue)
 		{
-			int val;
 			if (settings[setting] != null)
 			{
-				if (int.TryParse(settings[setting].InnerText, out val))
+				if (int.TryParse(settings[setting].InnerText, out int val))
 				{
-					val = MathStuff.Clamp(val, min, max);
+					val = Utils.Clamp(val, min, max);
 					return val;
 				}
 				else
@@ -392,7 +399,7 @@ namespace LiveSplit.RedFaction
 
 		private void Cbox_Mod_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			CBList_Splits.DataSource = Mods[((ComboBox)sender).SelectedIndex].Splits;
+			CBList_Splits.DataSource = ModStates[((ComboBox)sender).SelectedIndex].Splits;
 			CBList_Splits.DisplayMember = "Name";
 			CBList_Splits.ValueMember = "Split";
 
